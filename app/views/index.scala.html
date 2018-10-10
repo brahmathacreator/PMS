@@ -1,0 +1,82 @@
+@(f: Form[controllers.dto.Navigation])
+@layout.login{
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
+                <div class="card-body">
+                    @if(f("adminUserFlg").getValue().orElse("0").equals("1")){
+                    <a href="@controllers.user.routes.UserOps.adminRegisterPage()"
+                       class="loginBtnCus btn btn-lg btn-pill btn-primary">@Messages("app.login.register")</a>
+                    }else{
+                    <form id="frm1" name="frm1" action="@routes.Main.login()" class="parsley-validation" method="POST">
+                        @helper.CSRF.formField
+                        <h1>@Messages("app.login")</h1>
+                        <p class="text-muted">@Messages("app.login.desc")</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="icon-user"></i>
+                        </span>
+                            </div>
+                            <input class='form-control @if(f.getError("userId").isPresent()){is-invalid}' id="userId"
+                                   name="userId" type="text"
+                                   placeholder='@Messages("app.user.name")' required="required"
+                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                   value='@f("userId").getValue().orElse("")'
+                                   data-toggle="tooltip" data-html="true" autocomplete="off"
+                                   title='@Messages("app.validation.txt1")@Messages("app.user.name")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                            <div class="invalid-feedback">
+                                @for(error <- f("userId").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="icon-lock"></i>
+                        </span>
+                            </div>
+                            <input class='form-control @if(f.getError("password").isPresent()){is-invalid}'
+                                   id="password" name="password" type="password"
+                                   placeholder='@Messages("app.password")' required="required"
+                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                   value='@f("password").getValue().orElse("")'
+                                   data-toggle="tooltip" data-html="true" autocomplete="off"
+                                   title='@Messages("app.validation.txt1")@Messages("app.password")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                            <div class="invalid-feedback">
+                                @for(error <- f("password").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" name="adminUserFlg" id="adminUserFlg" value='@f("adminUserFlg").getValue().orElse("")'/>
+                            <div class="col-6">
+                                <button class="btn btn-primary px-4" type="submit">@Messages("app.login")</button>
+                            </div>
+                            <div class="col-6 text-right">
+                                <a class="btn btn-link px-0"
+                                   href="@controllers.user.routes.PasswordOps.resetPasswordPage()">@Messages("app.forgot.pwd")</a>
+                            </div>
+                        </div>
+                    </form>
+                    }
+                </div>
+            </div>
+            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+                <div class="card-body text-center">
+                    <div>
+                        <h2>@Messages("app.name")</h2>
+                        <p>@Messages("app.desc.detail")</p>
+                        <img class="navbar-brand-full" src='@routes.Assets.versioned("images/favicon.png")' width="50"
+                             height="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+}

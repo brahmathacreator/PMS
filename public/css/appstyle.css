@@ -1,0 +1,49 @@
+.loginBtnCus{
+    margin-top: 35%;
+    margin-left: 9%;
+}
+
+.colorblue{
+color: #20a8d8;
+}
+
+.blogImgHeight{
+height: 250px;
+}
+
+.commentImgSize{
+width: 50px;
+height: 50px;
+}
+
+.clock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    color: #73818f;
+    font-size: 30px;
+    font-family: Orbitron;
+    letter-spacing: 7px;
+}
+
+.loader {
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #3498db;
+  border-bottom: 10px solid #3498db;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

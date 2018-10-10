@@ -1,0 +1,190 @@
+@(curdOpt: Integer, activeMenu: String, h: dto.Home)
+
+@import views.html.partials.utils._genericerror;
+@layout.main(curdOpt, activeMenu){
+@if(h!=null){
+@if("1".equals(session.get("SESSION_ROLE_TYPE"))){
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt5")&nbsp;
+    <small>@session.get("SESSION_USER_NAME")</small>
+</h3>
+<hr/>
+<br/>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clock"></div>
+    </div>
+</div>
+<br/>
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt1")
+    <small>@Messages("app.home.txt2")</small>
+</h3>
+<hr/>
+<div class="row">
+    <div class="col-6 col-lg-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-fort-awesome fa-lg"></i>
+                </div>
+                <div class="text-value">@h.getSchools()</div>
+                <small class="text-muted text-uppercase font-weight-bold">@Messages("app.menu.school")</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-users fa-lg"></i>
+                </div>
+                <div class="text-value">@h.getBatches()</div>
+                <small class="text-muted text-uppercase font-weight-bold">@Messages("app.menu.batch")</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-flag-checkered fa-lg"></i>
+                </div>
+                <div class="text-value">@h.getSections()</div>
+                <small class="text-muted text-uppercase font-weight-bold">@Messages("app.menu.section")</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-user fa-lg"></i>
+                </div>
+                <div class="text-value">@h.getUsers()</div>
+                <small class="text-muted text-uppercase font-weight-bold">@Messages("app.menu.user")</small>
+            </div>
+        </div>
+    </div>
+</div>
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt3")
+    <small>@Messages("app.home.txt4")</small>
+</h3>
+<hr/>
+<div class="row">
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body p-0 d-flex align-items-center">
+                <i class="fa fa-cogs bg-info p-4 px-5 font-2xl mr-3"></i>
+                <div>
+                    <div class="text-value-sm text-primary">@h.getAdmins()</div>
+                    <div class="text-muted text-uppercase font-weight-bold small">@Messages("app.user.admin")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body p-0 d-flex align-items-center">
+                <i class="fa fa-balance-scale bg-info p-4 px-5 font-2xl mr-3"></i>
+                <div>
+                    <div class="text-value-sm text-primary">@h.getTutors()</div>
+                    <div class="text-muted text-uppercase font-weight-bold small">@Messages("app.menu.tutor")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body p-0 d-flex align-items-center">
+                <i class="fa fa-child bg-info p-4 px-5 font-2xl mr-3"></i>
+                <div>
+                    <div class="text-value-sm text-primary">@h.getStudents()</div>
+                    <div class="text-muted text-uppercase font-weight-bold small">@Messages("app.menu.student")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}else if("2".equals(session.get("SESSION_ROLE_TYPE"))){
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt5")&nbsp;
+    <small>@session.get("SESSION_USER_NAME")</small>
+</h3>
+<hr/>
+<br/>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clock"></div>
+    </div>
+</div>
+<br/>
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt3")
+    <small>@Messages("app.home.txt4")</small>
+</h3>
+<hr/>
+<div class="row">
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body p-0 d-flex align-items-center">
+                <i class="fa fa-balance-scale bg-info p-4 px-5 font-2xl mr-3"></i>
+                <div>
+                    <div class="text-value-sm text-primary">@h.getTutors()</div>
+                    <div class="text-muted text-uppercase font-weight-bold small">@Messages("app.menu.tutor")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body p-0 d-flex align-items-center">
+                <i class="fa fa-child bg-info p-4 px-5 font-2xl mr-3"></i>
+                <div>
+                    <div class="text-value-sm text-primary">@h.getStudents()</div>
+                    <div class="text-muted text-uppercase font-weight-bold small">@Messages("app.menu.student")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}else if("3".equals(session.get("SESSION_ROLE_TYPE"))){
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt5")&nbsp;
+    <small>@session.get("SESSION_USER_NAME")</small>
+</h3>
+<hr/>
+<br/>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clock"></div>
+    </div>
+</div>
+<br/>
+}else{
+@_genericerror(curdOpt, activeMenu)
+}
+}else{
+<h3 class="my-4">
+    <i class="fa fa-snowflake-o"></i>
+    @Messages("app.home.txt5")&nbsp;
+    <small>@session.get("SESSION_USER_NAME")</small>
+</h3>
+<hr/>
+<br/>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clock"></div>
+    </div>
+</div>
+<br/>
+}
+}
+<script type="text/javascript">showTime();</script>

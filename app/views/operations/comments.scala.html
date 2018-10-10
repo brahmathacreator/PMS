@@ -1,0 +1,173 @@
+@(curdOpt: Integer, activeMenu: String, project: Project, f: Form[Comments])
+@layout.main(curdOpt, activeMenu){
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="my-4">
+            <i class="fa fa-stack-overflow"></i>
+            @project.getProjectTitle()
+            <small>@project.getProjectTitleDesc()</small>
+        </h1>
+        <div class="card mb-4">
+            <img class="card-img-top fluid blogImgHeight" src="@project.getLogo()"
+                 alt="Card image cap">
+            <div class="card-body">
+                <h2 class="card-title">@Messages("app.project.description")</h2>
+                <p class="card-text">@project.getDescription()</p>
+            </div>
+            <div class="card-footer text-muted">
+                @Messages("app.project.creation.dt")&nbsp;@project.getProjectCreationDT()&nbsp;@Messages("app.project.duration")&nbsp;@project.getDuration()
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <ul class="list-unstyled">
+            @if(project.getComments() != null && project.getComments().size() > 0){
+            @for(obj <- project.getComments()){
+            <li class="media my-4">
+                <img class="align-self-center mr-3 commentImgSize"
+                     src='@routes.Assets.versioned("uploads/logo/user.png")' alt="image">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">@obj.getCommentByName()
+                        <small class="mt-0 mb-1">@obj.getSubject()</small>
+                    </h5>
+                    @obj.getDescription()
+                    <br/>
+                    @Messages("app.comments.attachment"): &nbsp;
+                    @if("-NA-".contains(obj.getAttachment())){
+                    @Messages("app.na")
+                    }else{
+                    <a href="@obj.getAttachment()">@Messages("app.comments.download")</a>
+                    }
+                </div>
+            </li>
+            }
+            }else{
+            <li class="media">
+                <img class="mr-3 commentImgSize" src='@routes.Assets.versioned("uploads/logo/user.png")' alt="image">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">@Messages("app.comments.no.comments")</h5>
+                    @Messages("app.comments.no.comments.desc")
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <form id="frm1" name="frm1"
+              action="@controllers.operational.routes.CommentOps.curdOperations(1, activeMenu)"
+              class="parsley-validation" method="POST" enctype="multipart/form-data">
+            @helper.CSRF.formField
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a class="btn">
+                                <i class="fa fa-comments fa-lg"></i>
+                                 @Messages("app.comments.title")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="commentId" id="commentId" value='@f("commentId").getValue().orElse("")'/>
+                <input type="hidden" name="projectId" id="projectId" value='@project.getProjectId()'/>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label"
+                               for="commentByName">@Messages("app.comments.by")</label>
+                        <div class="col-md-9">
+                            <input class='form-control @if(f.getError("commentByName").isPresent()){is-invalid}'
+                                   id="commentByName"
+                                   type="text" name="commentByName" value='@f("commentByName").getValue().orElse("")'
+                                   autocomplete="off"
+                                   required="required"
+                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                   data-parsley-minlength='@Messages("app.generic.alpha.numeric.special.min")'
+                                   data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
+                                   data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
+                                   data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
+                                   data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
+                                   data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
+                                   data-toggle="tooltip" data-html="true"
+                                   title='@Messages("app.validation.txt1")@Messages("app.comments.by")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'>
+                            <div class="invalid-feedback">
+                                @for(error <- f("commentByName").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label"
+                               for="subject">@Messages("app.comments.subject")</label>
+                        <div class="col-md-9">
+                            <input class='form-control @if(f.getError("subject").isPresent()){is-invalid}'
+                                   id="subject"
+                                   type="text" name="subject"
+                                   value='@f("subject").getValue().orElse("")'
+                                   autocomplete="off"
+                                   required="required"
+                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                   data-parsley-minlength='@Messages("app.generic.alpha.numeric.special.min")'
+                                   data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
+                                   data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
+                                   data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
+                                   data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
+                                   data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
+                                   data-toggle="tooltip" data-html="true"
+                                   title='@Messages("app.validation.txt1")@Messages("app.comments.subject")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'>
+                            <div class="invalid-feedback">
+                                @for(error <- f("subject").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label"
+                               for="description">@Messages("app.desc")</label>
+                        <div class="col-md-9">
+                            <textarea class='form-control @if(f.getError("description").isPresent()){is-invalid}'
+                                      id="description"
+                                      type="text" name="description"
+                                      autocomplete="off"
+                                      required="required"
+                                      data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                      data-parsley-minlength='@Messages("app.generic.alpha.numeric.special.min")'
+                                      data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
+                                      data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
+                                      data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
+                                      data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
+                                      data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
+                                      data-toggle="tooltip" data-html="true"
+                                      title='@Messages("app.validation.txt1")@Messages("app.desc")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'> @f("description").getValue().orElse("")</textarea>
+                            <div class="invalid-feedback">
+                                @for(error <- f("description").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label"
+                               for="avatar">@Messages("app.comments.attachment")</label>
+                        <div class="col-md-9">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="avatar" id="avatar">
+                                <label class="custom-file-label" for="avatar"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-success" onclick="return showLoader();" type="submit">
+                        <i class="fa fa-dot-circle-o"></i> @Messages("app.submit")
+                    </button>
+                    <button class="btn btn-sm btn-danger" type="reset">
+                        <i class="fa fa-ban"></i> @Messages("app.reset")
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+}

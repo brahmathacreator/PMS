@@ -1,0 +1,227 @@
+#general texts
+app.name = PMS
+app.product.desc = Project Management System
+app.desc.detail = Project management system is the application of knowledge, skills, tools, and techniques to project activities to meet the project requirements.
+app.author = Ramakrishna
+app.keyword = Project, Management, system
+app.rights = 2018 All Rights Reserved.
+app.poweredby = Powered by
+app.hi = Hi
+app.login = Login
+app.login.desc = Sign In to your account
+app.logout = Logout
+app.forgot.pwd = Forgot password
+app.user.name = Username
+app.password = Password
+app.confirm.password = Confirm Password
+app.error.page.txt1 = Oops! You're lost.
+app.status = Status:
+app.error.page.txt2 = The page you are looking for was not found.
+app.details = Details
+app.no.details = No details available.
+app.login.register = Click here to register admin
+app.login.as = Login as
+app.user.admin = Admin
+app.user.teacher = Teacher
+app.user.student = Student
+app.session.timeout = Your session is expired.
+app.submit = Submit
+app.cancel = Cancel
+app.reset = Reset
+app.list = List
+app.options = Options
+app.previous = Previous
+app.displaying = Displaying
+app.to = to
+app.of = of
+app.next = Next
+app.loading = Loading...
+app.select = Select
+app.yes = Yes
+app.no = No
+app.na = NA
+app.logo = Logo
+app.desc = Description
+app.record.created.successfully = Record created successfully.
+app.record.updated.successfully = Record updated successfully.
+app.record.deleted.successfully = Record deleted successfully.
+
+
+#Main Layout
+app.layout.main.user.type = User type
+app.layout.main.user.type.admin = Admin
+app.layout.main.user.type.tutor = Tutor
+app.layout.main.user.type.student = Student
+
+#Home
+app.home.txt1 = Section
+app.home.txt2 = Summarize the section counts
+app.home.txt3 = User
+app.home.txt4 = Summarize the user counts
+app.home.txt5 = Welcome:
+
+#Filter
+app.filter.title = Search
+app.filter.search.by = Search by
+app.filter.search.select = Select
+app.filter.search.value = Search value
+app.filter.order.by = Order by
+app.filter.order.value = Order value
+app.filter.order.ascending = Ascending
+app.filter.order.descending = Descending
+app.filter.total.records = Total records:
+
+
+#User
+app.admin.registration.header = Admin user registration
+app.other.registration.header = User registration
+app.admin.registration.user.id = User id
+app.admin.registration.username = User name
+app.admin.registration.password = Password
+app.admin.registration.confirm.password = Confirm password
+app.admin.registration.email = Email
+app.admin.registration.phone = Phone
+app.admin.registration.avatar = Avatar
+app.admin.registration.user.type = User type
+app.user.registration.user.type.admin = Admin
+app.user.registration.user.type.tutor = Tutor
+app.user.registration.user.type.student = Student
+
+
+#Mail
+app.mail.password.reset.header = Activation Mail
+app.mail.password.reset.message = Please click the below link to set your password
+app.mail.generate.password = Generate password
+
+
+#Change password
+app.pwd.module.title = Change Password
+app.pwd.registered.email = Registered Email
+app.pwd.txt1 = Password changed successfully.
+
+#Dashboard Page
+app.dashboard.title = Application Status
+
+
+#School
+app.school.title = School
+app.school.name = School name
+app.school.desc = Description
+app.school.contact.person.name = Contact person name
+app.school.contact.person.email = Contact person email
+app.school.contact.person.phone = Contact person phone
+
+#Batch
+app.batch.title = Batch
+app.batch.name = Batch Name
+app.batch.incharge.person.name = In-charge person name
+app.batch.incharge.person.email = In-charge person email
+app.batch.incharge.person.phone = In-charge person phone
+
+#Section
+app.section.title = Section
+app.section.name = Section Name
+app.section.incharge.person.name = In-charge person name
+app.section.incharge.person.email = In-charge person email
+app.section.incharge.person.phone = In-charge person phone
+
+#Project
+app.project.title = Project
+app.project.name = Project Title
+app.project.name.note = Project Title Note
+app.project.creation.dt = Created On
+app.project.duration = Duration (in Days)
+app.project.description = Project Description
+
+#Comments
+app.comments.title = Comments
+app.comments.by = Name
+app.comments.subject = Subject
+app.comments.attachment = Attachment
+app.comments.no.comments = No comments available
+app.comments.no.comments.desc = Please add some comments to view.
+app.comments.download = Download
+
+
+
+
+
+
+
+
+
+
+
+
+#Error Messages
+error.Required = Custom error
+app.error.txt.0 = Problem occurred, Please try again later.
+app.error.txt.1 = Admin already exists.
+app.error.txt.2 = File upload failed.
+app.error.txt.3 = Only png/jpg/jpeg formats allowed. File size must be less than 1 MB.
+app.error.txt.4 = Problem occurred while sending email.
+app.error.txt.5 = Password and Confirm Password didn't match.
+app.error.txt.6 = Invalid user role
+app.error.txt.7 = Invalid CURD option
+app.error.txt.8 = Invalid CURD option passed or CURD option not available in the request. Parameters Received:
+app.error.txt.9 = No record found.
+app.error.txt.10 = Please add some data to view the list.
+app.error.txt.11 = Unable to get the selected record.
+app.error.txt.12 = Invalid school id.
+app.error.txt.13 = Invalid batch id.
+app.error.txt.14 = Invalid section id.
+app.error.txt.15 = Email id already registered.
+
+
+#Validation
+app.generic.alpha.numeric.special.min = 2
+app.generic.alpha.numeric.special.max = 2000
+app.generic.alpha.numeric.special.pattern = ^[A-Za-z0-9 _,\\.\\/\\-\\ ]*$
+app.generic.alpha.numeric.special.desc = Allowed: Lower case, Upper case, Numeric, _(Underscore), .(Dot), /(Front slash), -(Hyphen)
+app.generic.numeric.min = 1
+app.generic.numeric.max = 10
+app.generic.numeric.pattern = ^[0-9]*$
+app.generic.numeric.desc = Allowed: Numeric
+app.generic.alpha.min = 2
+app.generic.alpha.max = 200
+app.generic.alpha.pattern = ^[A-Za-z_]*$
+app.generic.alpha.desc = Allowed: Lower case, Upper case
+app.generic.alpha.numeric.min = 2
+app.generic.alpha.numeric.max = 100
+app.generic.alpha.numeric.pattern = ^[A-Za-z0-9_ ]*$
+app.generic.alpha.numeric.desc = Allowed: Lower case, Upper case, Numeric
+app.generic.invalid.email = Invalid email address
+app.password.min = 8
+app.password.max = 16
+app.password.pattern = ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@%#])[A-Za-z\d@%#]*$
+app.password.desc = Must Contain: Lower case, Upper case, Numeric, @, #(Hash), %(Percentage)
+app.phone.min = 10
+app.phone.max = 10
+app.phone.pattern = ^[0-9]{8}$|^[0-9]{10}$
+app.phone.desc =  Allowed: Numeric
+app.validation.txt1 = Filed [
+app.validation.txt2 = ] Details
+app.validation.txt3 = ]
+app.validation.txt.min = Min [
+page.validation.txt.max = Max [
+page.validation.txt.Mandatory.yes = Mandatory [Yes]
+page.validation.txt..Mandatory.no = Mandatory [No]
+
+
+#Menu Details
+app.menu.nav.home = Home
+app.menu.nav.add = Add
+app.menu.nav.edit = Edit
+app.menu.nav.view = View
+app.menu.nav.delete = Delete
+app.menu.nav.all = All
+app.menu.dashboard = Home
+app.menu.administration = Administration
+app.menu.user = User
+app.menu.operations = Operations
+app.menu.school = School
+app.menu.batch = Batch
+app.menu.section = Section
+app.menu.tutor = Tutor
+app.menu.student = Student
+app.menu.project = Project

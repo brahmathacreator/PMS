@@ -1,0 +1,241 @@
+@import helper._
+@import play.data._
+@(curdOpt: Integer, activeMenu: String)(content: Html)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="description" content='@Messages("app.desc")'>
+        <meta name="author" content='@Messages("app.author")'>
+        <meta name="keyword" content='@Messages("app.keyword")'>
+        <title>@Messages("app.name")</title>
+        <!-- Icons-->
+        <link href='@routes.Assets.versioned("css/coreui/icons/css/coreui-icons.min.css")' media="screen"
+              rel="stylesheet">
+        <link href='@routes.Assets.versioned("css/flag-icon/css/flag-icon.min.css")' media="screen" rel="stylesheet">
+        <link href='@routes.Assets.versioned("css/font-awesome/css/font-awesome.min.css")' media="screen"
+              rel="stylesheet">
+        <link href='@routes.Assets.versioned("css/simple-line-icons/css/simple-line-icons.css")' media="screen"
+              rel="stylesheet">
+        <!-- Main styles for this application-->
+        <link href='@routes.Assets.versioned("css/style.css")' rel="stylesheet" media="screen">
+        <link href='@routes.Assets.versioned("css/pace-progress/css/pace.min.css")' media="screen" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href='@routes.Assets.versioned("css/appstyle.css")'>
+        <link rel="shortcut icon" type="image/png" href='@routes.Assets.versioned("images/favicon.png")'>
+    </head>
+    <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+        <header class="app-header navbar">
+            <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img class="navbar-brand-minimized" src='@routes.Assets.versioned("images/favicon.png")' width="30"
+                     height="30">
+                <img class="navbar-brand-full" src='@routes.Assets.versioned("images/favicon.png")' width="50"
+                     height="50">
+            </a>
+            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav d-md-down-none">
+                <li class="nav-item px-3">
+                    <a class="nav-link"
+                       href='@controllers.dashboard.routes.DashboardOps.index(6, Messages("app.menu.dashboard"))'>
+                        @Messages("app.product.desc")
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        <img class="img-avatar"
+                             src='@session.get("SESSION_USER_LOGO")'>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-header text-center">
+                            <strong>@Messages("app.hi"), @session.get("SESSION_USER_NAME")
+                            </strong>
+                        </div>
+                        <div class="dropdown-item">
+                            <i class="fa fa-user fa-lg"></i>
+                            @Messages("app.layout.main.user.type")
+                            @if("1".equals(session.get("SESSION_ROLE_TYPE"))){
+                            <span class="badge badge-primary">@Messages("app.layout.main.user.type.admin")</span>
+                            }else if("2".equals(session.get("SESSION_ROLE_TYPE"))){
+                            <span class="badge badge-primary">@Messages("app.layout.main.user.type.tutor")</span>
+                            }else if("3".equals(session.get("SESSION_ROLE_TYPE"))){
+                            <span class="badge badge-primary">@Messages("app.layout.main.user.type.student")</span>
+                            }
+                        </div>
+                        <div class="dropdown-header text-center">
+                            <a href="@routes.Main.logout()">
+                                <i class="fa fa-lock"></i>
+                                <strong>Logout</strong>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item d-md-down-none">
+                    <a class="nav-link" href="@routes.Main.logout()">
+                        <i class="icons font-2xl d-block cui-account-logout"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </header>
+        <div class="app-body">
+            <div class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href='@controllers.dashboard.routes.DashboardOps.index(6, Messages("app.menu.dashboard"))'>
+                                <i class="fa fa-home fa-lg"></i>
+                                @Messages("app.menu.dashboard")
+                            </a>
+                        </li>
+                        @if("1".equals(session.get("SESSION_ROLE_TYPE"))){
+                        <li class="nav-title">@Messages("app.menu.operations")</li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.operational.routes.SchoolOps.index(4, Messages("app.menu.school"))'>
+                                <i class="fa fa-fort-awesome fa-lg"></i>
+                                @Messages("app.menu.school")
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.operational.routes.BatchOps.index(4, Messages("app.menu.batch"))'>
+                                <i class="fa fa-users fa-lg"></i>
+                                @Messages("app.menu.batch")
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.operational.routes.SectionOps.index(4, Messages("app.menu.section"))'>
+                                <i class="fa fa-flag-checkered fa-lg"></i>
+                                @Messages("app.menu.section")
+                            </a>
+                        </li>
+                        <li class="nav-title">@Messages("app.menu.administration")</li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.user.routes.UserOps.index(4, Messages("app.menu.user"))'>
+                                <i class="fa fa-user fa-lg"></i>
+                                @Messages("app.menu.user")
+                            </a>
+                        </li>
+                        }else if("2".equals(session.get("SESSION_ROLE_TYPE")) ||
+                        "3".equals(session.get("SESSION_ROLE_TYPE"))){
+                        <li class="nav-title">@Messages("app.menu.operations")</li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.operational.routes.ProjectOps.index(4, Messages("app.menu.project"))'>
+                                <i class="fa fa-stack-overflow fa-lg"></i>
+                                @Messages("app.menu.project")
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </nav>
+                <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+            </div>
+            <main class="main">
+                <!-- Breadcrumb-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a onclick="return showLoader();"
+                           href='@controllers.dashboard.routes.DashboardOps.index(6, Messages("app.menu.dashboard"))'>
+                            @Messages("app.menu.nav.home")
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        @activeMenu
+                    </li>
+                    @if(1.equals(curdOpt)){
+                    <li class="breadcrumb-item active">
+                        @Messages("app.menu.nav.add")
+                    </li>
+                    }else if(2.equals(curdOpt)){
+                    <li class="breadcrumb-item active">
+                        @Messages("app.menu.nav.edit")
+                    </li>
+                    }else if(3.equals(curdOpt)){
+                    <li class="breadcrumb-item active">
+                        @Messages("app.menu.nav.view")
+                    </li>
+                    }else if(4.equals(curdOpt)){
+                    <li class="breadcrumb-item active">
+                        @Messages("app.menu.nav.all")
+                    </li>
+                    }else if(5.equals(curdOpt)){
+                    <li class="breadcrumb-item active">
+                        @Messages("app.menu.nav.delete")
+                    </li>
+                    }
+                    <!-- Breadcrumb Menu-->
+                    <li class="breadcrumb-menu d-md-down-none">
+                        <div class="btn-group" role="group" aria-label="Button group">
+
+                        </div>
+                    </li>
+                </ol>
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        <div id="loader" class="modal fade bd-example-modal-sm"
+                             tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+                             data-backdrop="static">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <center>
+                                        <h4>
+                                            @Messages("app.loading")
+                                        </h4>
+                                        <div class="loader"></div>
+                                        <br/>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+
+                        @for(key <- Array("danger","info","success","warning")){
+                        @if(flash.containsKey(key)){
+                        <div class="alert alert-@key alert-dismissible fade show" role="alert">
+                            @flash.get(key)
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        }
+                        }
+
+                        @content
+                    </div>
+                </div>
+            </main>
+        </div>
+        <footer class="app-footer">
+            <div>
+                <a class="colorblue">@Messages("app.name")</a>
+                <span>&copy; @Messages("app.rights")</span>
+            </div>
+            <div class="ml-auto">
+                <span>@Messages("app.poweredby")</span>
+                <a class="colorblue">@Messages("app.name")</a>
+            </div>
+        </footer>
+        <!-- CoreUI and necessary plugins-->
+        <script src='@routes.Assets.versioned("js/jquery/js/jquery.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/popper.js/js/popper.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/bootstrap/js/bootstrap.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/pace-progress/js/pace.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/perfect-scrollbar/js/perfect-scrollbar.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/coreui/js/coreui.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/parsley/parsley.min.js")'></script>
+        <script src='@routes.Assets.versioned("js/appscript.js")' type="text/javascript"></script>
+    </body>
+</html>

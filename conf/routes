@@ -1,0 +1,58 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.Main.index()
+POST    /                           controllers.Main.login()
+GET     /logout                     controllers.Main.logout()
+GET     /adminRegisterPage          controllers.user.UserOps.adminRegisterPage()
+POST    /adminRegisterPage          controllers.user.UserOps.saveAdmin()
+GET     /resetPasswordPage          controllers.user.PasswordOps.resetPasswordPage()
+POST    /resetPasswordPage          controllers.user.PasswordOps.resetPassword()
+
+
+#User Page
+GET     /user                       controllers.user.UserOps.index(curdOpt: Integer, activeMenu: String)
+GET     /usersearch                 controllers.user.UserOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
+GET     /userselectrecord           controllers.user.UserOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /userselectrecord           controllers.user.UserOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+#Dashboard Page
+GET     /dashboard                  controllers.dashboard.DashboardOps.index(curdOpt: Integer, activeMenu: String)
+
+
+#School Page
+GET     /school                     controllers.operational.SchoolOps.index(curdOpt: Integer, activeMenu: String)
+GET     /schoolsearch               controllers.operational.SchoolOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
+GET     /schoolselectrecord         controllers.operational.SchoolOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /schoolselectrecord         controllers.operational.SchoolOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+
+#Batch Page
+GET     /batch                      controllers.operational.BatchOps.index(curdOpt: Integer, activeMenu: String)
+GET     /batchsearch                controllers.operational.BatchOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
+GET     /batchselectrecord          controllers.operational.BatchOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /batchselectrecord          controllers.operational.BatchOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+
+
+#Section Page
+GET     /section                      controllers.operational.SectionOps.index(curdOpt: Integer, activeMenu: String)
+GET     /sectionsearch                controllers.operational.SectionOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
+GET     /sectionselectrecord          controllers.operational.SectionOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /sectionselectrecord          controllers.operational.SectionOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+
+#Project Page
+GET     /project                      controllers.operational.ProjectOps.index(curdOpt: Integer, activeMenu: String)
+GET     /projectsearch                controllers.operational.ProjectOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
+GET     /projectselectrecord          controllers.operational.ProjectOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /projectselectrecord          controllers.operational.ProjectOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+#Comments Page
+GET     /commentsselectrecord         controllers.operational.CommentOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
+POST    /commentsselectrecord         controllers.operational.CommentOps.curdOperations(curdOpt: Integer, activeMenu: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

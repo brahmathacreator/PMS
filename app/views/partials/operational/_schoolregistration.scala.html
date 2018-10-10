@@ -1,0 +1,187 @@
+@(curdOpt: Integer, activeMenu: String, action: Object, f: Form[School])
+
+<form id="frm1" name="frm1" action="@action" class="parsley-validation" method="POST" enctype="multipart/form-data">
+    @helper.CSRF.formField
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="btn">
+                        <i class="fa fa-fort-awesome fa-lg"></i>
+                         @Messages("app.school.title")
+                    </a>
+                </div>
+                <div class="col-md-9">
+                    <a class="btn float-right" onclick="return showLoader();"
+                       href='@controllers.operational.routes.SchoolOps.index(4, activeMenu)'>
+                        <i class="fa fa-retweet fa-lg"></i>
+                         @Messages("app.menu.nav.all")
+                    </a>
+                    <a class="btn float-right" onclick="return showLoader();"
+                       href="@controllers.operational.routes.SchoolOps.selectRecord(1, activeMenu, 0)">
+                        <i class="fa fa-plus fa-lg"></i>
+                         @Messages("app.menu.nav.add")
+                    </a>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="schoolId" id="schoolId" value='@f("schoolId").getValue().orElse("")'/>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label"
+                       for="schoolName">@Messages("app.school.name")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <input class='form-control @if(f.getError("schoolName").isPresent()){is-invalid}' id="schoolName"
+                           type="text" name="schoolName" value='@f("schoolName").getValue().orElse("")'
+                           autocomplete="off"
+                           required="required"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           data-parsley-minlength='@Messages("app.generic.alpha.numeric.min")'
+                           data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")'
+                           data-parsley-maxlength='@Messages("app.generic.alpha.numeric.max")'
+                           data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")'
+                           data-parsley-pattern='@Messages("app.generic.alpha.numeric.pattern")'
+                           data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.desc")'
+                           data-toggle="tooltip" data-html="true"
+                           title='@Messages("app.validation.txt1")@Messages("app.school.name")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.desc")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("schoolName").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>@f("schoolName").getValue().orElse("")</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="description">@Messages("app.school.desc")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <input class='form-control @if(f.getError("description").isPresent()){is-invalid}' id="description"
+                           type="text" name="description" value='@f("description").getValue().orElse("")'
+                           autocomplete="off"
+                           required="required"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           data-parsley-minlength='@Messages("app.generic.alpha.numeric.min")'
+                           data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")'
+                           data-parsley-maxlength='@Messages("app.generic.alpha.numeric.max")'
+                           data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")'
+                           data-parsley-pattern='@Messages("app.generic.alpha.numeric.pattern")'
+                           data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.desc")'
+                           data-toggle="tooltip" data-html="true"
+                           title='@Messages("app.validation.txt1")@Messages("app.school.desc")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.desc")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("description").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>@f("description").getValue().orElse("")</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="contactPersonName">@Messages("app.school.contact.person.name")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <input class='form-control @if(f.getError("contactPersonName").isPresent()){is-invalid}'
+                           id="contactPersonName"
+                           type="text" name="contactPersonName" value='@f("contactPersonName").getValue().orElse("")'
+                           autocomplete="off"
+                           required="required"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           data-parsley-minlength='@Messages("app.generic.alpha.numeric.min")'
+                           data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")'
+                           data-parsley-maxlength='@Messages("app.generic.alpha.numeric.max")'
+                           data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")'
+                           data-parsley-pattern='@Messages("app.generic.alpha.numeric.pattern")'
+                           data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.desc")'
+                           data-toggle="tooltip" data-html="true"
+                           title='@Messages("app.validation.txt1")@Messages("app.school.contact.person.name")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.desc")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("contactPersonName").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>@f("contactPersonName").getValue().orElse("")</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="contactPersonEmail">@Messages("app.school.contact.person.email")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <input class='form-control @if(f.getError("contactPersonEmail").isPresent()){is-invalid}'
+                           id="contactPersonEmail" type="contactPersonEmail"
+                           name="contactPersonEmail" value='@f("contactPersonEmail").getValue().orElse("")'
+                           autocomplete="off"
+                           required="required"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           data-toggle="tooltip" data-html="true"
+                           title='@Messages("app.validation.txt1")@Messages("app.school.contact.person.email")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("contactPersonEmail").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>@f("contactPersonEmail").getValue().orElse("")</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="contactPersonPhone">@Messages("app.school.contact.person.phone")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <input class='form-control  @if(f.getError("contactPersonPhone").isPresent()){is-invalid}'
+                           id="contactPersonPhone" type="text"
+                           name="contactPersonPhone" value='@f("contactPersonPhone").getValue().orElse("")'
+                           autocomplete="off" required="required"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           data-parsley-minlength='@Messages("app.phone.min")'
+                           data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")'
+                           data-parsley-maxlength='@Messages("app.phone.max")'
+                           data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")'
+                           data-parsley-pattern='@Messages("app.phone.pattern")'
+                           data-parsley-pattern-message='@Messages("app.phone.desc")'
+                           data-toggle="tooltip" data-html="true"
+                           title='@Messages("app.validation.txt1")@Messages("app.school.contact.person.phone")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")<br>@Messages("app.phone.desc")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("contactPersonPhone").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>@f("contactPersonPhone").getValue().orElse("")</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="avatar">@Messages("app.admin.registration.avatar")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="avatar" id="avatar">
+                        <label class="custom-file-label" for="avatar"></label>
+                    </div>
+                    }else{
+                    <p>@Messages("app.yes")</p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="hidden" name="logo" id="logo" value='@f("logo").getValue().orElse("")'/>
+            <button class="btn btn-sm btn-success" onclick="return showLoader();" type="submit">
+                <i class="fa fa-dot-circle-o"></i> @Messages("app.submit")
+            </button>
+            <a class="btn btn-sm btn-danger" type="button" onclick="return showLoader();"
+               href='@controllers.operational.routes.SchoolOps.index(4, Messages("app.menu.user"))'>
+                <i class="fa fa-ban"></i> @Messages("app.cancel")
+            </a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,22 @@
+@(msgtitle: String, msgdesc: Object)
+@layout.login{
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="clearfix">
+            <div class="card-body">
+                <div class="alert alert-dark" role="alert">
+                    <h1 class="float-left display-3 mr-4"><i class="fa fa-shield"></i></h1>
+
+                    <h4 class="pt-3">Oops! You're lost.</h4>
+                    <p class="text-muted">The page you are looking for was not found.</p>
+                    <hr>
+                    <h4 class="alert-heading">@msgtitle</h4>
+                    <p>@msgdesc</p>
+                    <hr>
+                    <p class="mb-0"><a href="@routes.Main.index()">@Messages("app.login")</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

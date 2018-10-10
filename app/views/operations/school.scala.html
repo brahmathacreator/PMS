@@ -1,0 +1,173 @@
+@(curdOpt: Integer, activeMenu: String,currentSortBy: String, currentOrder: String, searchBy: String, searchValue: String, page: io.ebean.PagedList[School], f: Form[School])
+
+@link(newPage: Int, newSortBy:String) = @{
+var sortBy = currentSortBy
+var order = currentOrder
+if(newSortBy != null) {
+sortBy = newSortBy
+if(currentSortBy == newSortBy) {
+if(currentOrder == "asc") {
+order = "desc"
+} else {
+order = "asc"
+}
+} else {
+order = "asc"
+}
+}
+controllers.operational.routes.SchoolOps.search(curdOpt, activeMenu, newPage, searchBy, searchValue, sortBy, order)
+}
+
+@header(key:String, title:String) = {
+<th>
+    <a href='@link(0, key)'>
+        <i class='@if(currentSortBy == key) { @{if(currentOrder == "asc") "fa fa-sort-amount-asc" else "fa fa-sort-amount-desc" } }'></i>
+        @title
+    </a>
+</th>
+}
+
+@import views.html.partials.utils._invalidcurd;
+@import views.html.partials.operational._schoolregistration;
+@layout.main(curdOpt, activeMenu){
+@if(curdOpt == 4){
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-3">
+                <a class="btn">
+                    <i class="fa fa-align-justify fa-lg"></i>
+                     @Messages("app.list")
+                </a>
+            </div>
+            <div class="col-md-9">
+                @if(4.equals(curdOpt)){
+                <a class="btn float-right" onclick="return showLoader();"
+                   href='@controllers.operational.routes.SchoolOps.index(4, activeMenu)'>
+                    <i class="fa fa-retweet fa-lg"></i>
+                     @Messages("app.menu.nav.all")
+                </a>
+                <a class="btn float-right" onclick="return showLoader();"
+                   href="@controllers.operational.routes.SchoolOps.selectRecord(1, activeMenu, 0)">
+                    <i class="fa fa-plus fa-lg"></i>
+                     @Messages("app.menu.nav.add")
+                </a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @if(page.getTotalCount == 0) {
+        @Messages("app.error.txt.9")
+        }else{
+        <form class="form-inline" action='@link(0,searchBy)' method="GET">
+            <div class="form-group mb-2">
+                <label for="searchBy" class="sr-only">@Messages("app.filter.search.by")</label>
+                <select class='form-control form-control-sm custom-select' id="searchBy" name="searchBy"
+                        autocomplete="off">
+                    <option value="">@Messages("app.filter.search.by")</option>
+                    <option value="schoolName">@Messages("app.school.name")</option>
+                    <option value="description">@Messages("app.school.desc")</option>
+                    <option value="contactPersonName">@Messages("app.school.contact.person.name")</option>
+                    <option value="contactPersonEmail">@Messages("app.school.contact.person.email")</option>
+                    <option value="contactPersonPhone">@Messages("app.school.contact.person.phone")</option>
+                </select>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="searchValue" class="sr-only">@Messages("app.filter.search.value")</label>
+                <input class="form-control form-control-sm" autocomplete="off" type="text" id="searchValue"
+                       name="searchValue" placeholder='@Messages("app.filter.search.value")' value="@searchValue">
+            </div>
+            <input type="hidden" name="curdOpt" id="curdOpt" value='@curdOpt'/>
+            <input type="hidden" name="activeMenu" id="activeMenu" value='@activeMenu'/>
+            <input type="hidden" name="currentSortBy" id="currentSortBy" value='@currentSortBy'/>
+            <input type="hidden" name="currentOrder" id="currentOrder" value='@currentOrder'/>
+            <input type="hidden" name="currentPage" id="currentPage" value='0'/>
+            <button type="submit" value='@Messages("app.submit")'
+                    class="btn btn-sm btn-primary mb-2"><i class="fa fa-search"></i>
+            </button>
+        </form>
+        <table class="table table-responsive-sm table-striped">
+            <thead>
+            <tr>
+                @header("schoolName",Messages("app.school.name"))
+                @header("description",Messages("app.school.desc"))
+                @header("contactPersonName",Messages("app.school.contact.person.name"))
+                @header("contactPersonEmail",Messages("app.school.contact.person.email"))
+                @header("contactPersonPhone",Messages("app.school.contact.person.phone"))
+                <th class="colorblue">@Messages("app.options")</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(l <- page.getList.asScala) {
+            <tr>
+                <td>@l.getSchoolName()</td>
+                <td>@l.getDescription()</td>
+                <td>@l.getContactPersonName()</td>
+                <td>@l.getContactPersonEmail()</td>
+                <td>@l.getContactPersonPhone()</td>
+                <td>
+                    <a onclick="return showLoader();"
+                       href='@controllers.operational.routes.SchoolOps.selectRecord(3, activeMenu,l.getSchoolId())'>
+                        <i class="fa fa-search"></i>
+                         @Messages("app.menu.nav.view")
+                    </a>
+                    &nbsp;/&nbsp;
+                    <a onclick="return showLoader();"
+                       href='@controllers.operational.routes.SchoolOps.selectRecord(2, activeMenu,l.getSchoolId())'>
+                        <i class="fa fa-edit"></i>
+                         @Messages("app.menu.nav.edit")
+                    </a>&nbsp;/&nbsp;
+                    <a onclick="return showLoader();"
+                       href='@controllers.operational.routes.SchoolOps.selectRecord(5, activeMenu,l.getSchoolId())'>
+                        <i class="fa fa-close"></i>
+                         @Messages("app.menu.nav.delete")
+                    </a>
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-6">
+                 @Messages("app.filter.total.records")&nbsp;@page.getTotalCount
+            </div>
+            <div class="col-md-6">
+                <ul class="pagination float-right">
+                    @if(page.hasPrev) {
+                    <li class="page-item">
+                        <a class="page-link" href="@link(page.getPageIndex - 1, null)">&larr;
+                            @Messages("app.previous")</a>
+                    </li>
+                    } else {
+                    <li class="page-item disabled">
+                        <a class="page-link">&larr; @Messages("app.previous")</a>
+                    </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link">@Messages("app.displaying")
+                            @page.getDisplayXtoYofZ(Messages("app.to"),Messages("app.of"))</a>
+                    </li>
+                    @if(page.hasNext) {
+                    <li class="page-item">
+                        <a class="page-link" href="@link(page.getPageIndex + 1, null)">@Messages("app.next") &rarr;</a>
+                    </li>
+                    } else {
+                    <li class="page-item disabled">
+                        <a class="page-link">@Messages("app.next") &rarr;</a>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+        }
+    </div>
+</div>
+}else if(curdOpt == 1 || curdOpt == 2 || curdOpt == 3 || curdOpt == 5){
+@_schoolregistration(curdOpt, activeMenu, controllers.operational.routes.SchoolOps.curdOperations(curdOpt, activeMenu), f)
+}else{
+@_invalidcurd(curdOpt, activeMenu)
+}
+
+}

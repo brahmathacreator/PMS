@@ -1,0 +1,97 @@
+@(pageFlag: Integer, action: Object, f: Form[dto.PageFilter])
+
+<form id="sfrm" name="sfrm" action="@action" class="parsley-validation" method="GET" enctype="multipart/form-data">
+    <div class="card">
+        <div class="card-header">
+            <strong>@Messages("app.filter.title")</strong></div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label"
+                       for="searchColumn">@Messages("app.filter.search.by")</label>
+                <div class="col-md-3">
+                    <select class='form-control custom-select @if(f.getError("searchColumn").isPresent()){is-invalid}'
+                            id="searchColumn" autocomplete="off"
+                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                            name="searchColumn">
+                        value='@f("searchColumn").getValue().orElse("")'>
+                        <option value="">@Messages("app.filter.search.select")</option>
+                        @if(pageFlag == 1){
+                        <option value="username">@Messages("app.admin.registration.username")</option>
+                        <option value="userId">@Messages("app.admin.registration.user.id")</option>
+                        <option value="email">@Messages("app.admin.registration.email")</option>
+                        <option value="email">@Messages("app.admin.registration.phone")</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        @for(error <- f("searchColumn").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                </div>
+                <label class="col-md-3 col-form-label" for="userId">@Messages("app.filter.search.value")</label>
+                <div class="col-md-3">
+                    <input class='form-control @if(f.getError("searchValue").isPresent()){is-invalid}' id="userId"
+                           type="text" name="searchValue" value='@f("searchValue").getValue().orElse("")'
+                           autocomplete="off"
+                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'>
+                    <div class="invalid-feedback">
+                        @for(error <- f("searchValue").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label"
+                       for="orderByColumn">@Messages("app.filter.order.by")</label>
+                <div class="col-md-3">
+                    <select class='form-control custom-select @if(f.getError("orderByColumn").isPresent()){is-invalid}'
+                            id="orderByColumn"
+                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                            name="orderByColumn" autocomplete="off">
+                        value='@f("orderByColumn").getValue().orElse("")'>
+                        <option value="">@Messages("app.filter.search.select")</option>
+                        @if(pageFlag == 1){
+                        <option value="username">@Messages("app.admin.registration.username")</option>
+                        <option value="userId">@Messages("app.admin.registration.user.id")</option>
+                        <option value="email">@Messages("app.admin.registration.email")</option>
+                        <option value="phone">@Messages("app.admin.registration.phone")</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        @for(error <- f("orderByColumn").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                </div>
+                <label class="col-md-3 col-form-label" for="userId">@Messages("app.filter.order.value")</label>
+                <div class="col-md-3">
+                    <select class='form-control custom-select @if(f.getError("orderByValue").isPresent()){is-invalid}'
+                            id="orderByValue"
+                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                            name="orderByValue" autocomplete="off">
+                        value='@f("orderByValue").getValue().orElse("")'>
+                        <option value="">@Messages("app.filter.search.select")</option>
+                        <option value="ASC">@Messages("app.filter.order.ascending")</option>
+                        <option value="DESC">@Messages("app.filter.order.descending")</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        @for(error <- f("orderByValue").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <input type="hidden" name="currentPage" id="currentPage" value='0'/>
+            <button class="btn btn-sm btn-success" type="submit">
+                <i class="fa fa-dot-circle-o"></i> @Messages("app.submit")
+            </button>
+            <button class="btn btn-sm btn-danger" type="reset">
+                <i class="fa fa-ban"></i> @Messages("app.reset")
+            </button>
+        </div>
+    </div>
+</form>
