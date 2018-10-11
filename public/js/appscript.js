@@ -7,6 +7,7 @@ $("form.parsley-validation").parsley({
 }).on('field:validated', function(fieldInstance) {
     var ok = $('.parsley-error').length === 0;
     if (!ok){
+        $('#loader').modal('hide');
         if (fieldInstance.$element.is(":hidden")) {
             fieldInstance._ui.$errorsWrapper.css('display', 'none');
             fieldInstance.validationResult = true;
