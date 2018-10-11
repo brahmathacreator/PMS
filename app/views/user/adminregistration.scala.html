@@ -1,6 +1,6 @@
 @(formTitle: String,f: Form[User])
-@import views.html.partials.user._userregistration;
+@import views.html.partials.user._adminuserregistration;
 
 @layout.login{
-@_userregistration(formTitle,controllers.user.routes.UserOps.saveAdmin(),f)
+@_adminuserregistration(formTitle,controllers.user.routes.UserOps.saveAdmin(),f)
 }
