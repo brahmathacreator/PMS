@@ -134,13 +134,19 @@ app.project.duration = Duration (in Days)
 app.project.description = Project Description
 
 #Comments
-app.comments.title = Comments
+app.comments.title = Comments / Tasks
 app.comments.by = Name
 app.comments.subject = Subject
 app.comments.attachment = Attachment
 app.comments.no.comments = No comments available
 app.comments.no.comments.desc = Please add some comments to view.
 app.comments.download = Download
+app.comments.note = Note
+app.comments.start.date = Start Date
+app.comments.end.date = End Date
+app.comments.actual.end.date = Actual End Date
+app.comments.final.marking = Mark as eligible
+
 
 
 
@@ -176,7 +182,7 @@ app.error.txt.15 = Email id already registered.
 #Validation
 app.generic.alpha.numeric.special.min = 2
 app.generic.alpha.numeric.special.max = 2000
-app.generic.alpha.numeric.special.pattern = ^[A-Za-z0-9 _,\\.\\/\\-\\ ]*$
+app.generic.alpha.numeric.special.pattern = ^[A-Za-z0-9 _,\\.\\/\\-\\ \\'\\"]*$
 app.generic.alpha.numeric.special.desc = Allowed: Lower case, Upper case, Numeric, _(Underscore), .(Dot), /(Front slash), -(Hyphen)
 app.generic.numeric.min = 1
 app.generic.numeric.max = 10
@@ -214,6 +220,7 @@ app.menu.nav.add = Add
 app.menu.nav.edit = Edit
 app.menu.nav.view = View
 app.menu.nav.delete = Delete
+app.menu.nav.complete = Complete
 app.menu.nav.all = All
 app.menu.dashboard = Home
 app.menu.administration = Administration

@@ -19,6 +19,8 @@ public class Project extends Model {
     private String projectTitleDesc;
     private String logo;
     @Constraints.Required(message = "page.validation.txt.Mandatory.yes")
+    @Lob
+    @Column(name="description", length=2000)
     private String description;
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date projectCreationDT;
@@ -30,10 +32,9 @@ public class Project extends Model {
     private Long batchId;
     @Column(nullable = false)
     private Long sectionId;
+    private String finalDescription;
+    private String zippedComments;
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<User> users = new ArrayList<User>(1);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private List<Comments> comments = new ArrayList<Comments>(1);
@@ -98,14 +99,6 @@ public class Project extends Model {
         this.duration = duration;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     public List<Comments> getComments() {
         return comments;
     }
@@ -136,5 +129,21 @@ public class Project extends Model {
 
     public void setSectionId(Long sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public String getFinalDescription() {
+        return finalDescription;
+    }
+
+    public void setFinalDescription(String finalDescription) {
+        this.finalDescription = finalDescription;
+    }
+
+    public String getZippedComments() {
+        return zippedComments;
+    }
+
+    public void setZippedComments(String zippedComments) {
+        this.zippedComments = zippedComments;
     }
 }

@@ -36,6 +36,7 @@ public class Constants {
     public static final Integer CURD_VIEW_ALL = 4;
     public static final Integer CURD_DELETE = 5;
     public static final Integer CURD_DASHBOARD = 6;
+    public static final Integer CURD_COMPLETE = 7;
 
     public static final String SESSION_USER_NAME = "SESSION_USER_NAME";
     public static final String SESSION_USER_KEY = "SESSION_USER_KEY";

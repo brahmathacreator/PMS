@@ -53,9 +53,6 @@ public class User extends Model {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserRole userRole;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Project> projects = new ArrayList<Project>(1);
-
 
     public User() {
     }
@@ -173,11 +170,4 @@ public class User extends Model {
         this.sectionId = sectionId;
     }
 
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
 }

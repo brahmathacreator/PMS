@@ -7,6 +7,7 @@ import io.ebean.*;
 import models.Comments;
 import models.Project;
 import models.Project;
+import models.SubComments;
 import play.Logger;
 import play.db.ebean.EbeanConfig;
 import play.db.ebean.Transactional;
@@ -51,6 +52,21 @@ public class ProjectImpl implements ProjectMeta {
             return exList.findPagedList();
         } finally {
             exList = null;
+        }
+    }
+
+    @Override
+    public Optional<Comments> getCommentDataByKey(Long id, Integer curdOpt) throws Exception {
+        Logger.debug("Inside [ProjectImpl][getDataByKey]");
+        Optional<Comments> optional;
+        ExpressionList<Comments> exList = null;
+        try {
+            exList = ebeanServer.find(Comments.class).where();
+            exList.add(Expr.eq("commentId", id));
+            optional = Optional.ofNullable(exList.findOne());
+            return optional;
+        } finally {
+            optional = null;
         }
     }
 
@@ -131,6 +147,8 @@ public class ProjectImpl implements ProjectMeta {
         boolean status = false;
         Date d = null;
         try {
+            if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME)))
+                object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "]");
             object.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
             if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
                 object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
@@ -138,6 +156,30 @@ public class ProjectImpl implements ProjectMeta {
             Logger.info("[ProjectImpl][saveOrEdit] Record saved.");
             status = true;
         } finally {
+            d = null;
+        }
+        return status;
+    }
+
+    @Override
+    public boolean saveSubComments(SubComments object, Integer curdOpt, Http.Context ctx) throws Exception {
+        Logger.debug("Inside [ProjectImpl][saveOrEdit]");
+        boolean status = false;
+        Comments comment = null;
+        Date d = null;
+        try {
+            if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME)))
+                object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "]");
+            comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
+            comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
+            object.setComment(comment);
+            if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
+                object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
+            object.save();
+            Logger.info("[ProjectImpl][saveOrEdit] Record saved.");
+            status = true;
+        } finally {
+            comment = null;
             d = null;
         }
         return status;

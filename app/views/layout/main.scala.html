@@ -12,7 +12,7 @@
         <meta name="author" content='@Messages("app.author")'>
         <meta name="keyword" content='@Messages("app.keyword")'>
         <title>@Messages("app.name")</title>
-        <!-- Icons-->
+        <!-- Icons And Style Lib-->
         <link href='@routes.Assets.versioned("css/coreui/icons/css/coreui-icons.min.css")' media="screen"
               rel="stylesheet">
         <link href='@routes.Assets.versioned("css/flag-icon/css/flag-icon.min.css")' media="screen" rel="stylesheet">
@@ -20,11 +20,15 @@
               rel="stylesheet">
         <link href='@routes.Assets.versioned("css/simple-line-icons/css/simple-line-icons.css")' media="screen"
               rel="stylesheet">
+        <link href='@routes.Assets.versioned("css/datepicker/bootstrap-datepicker.min.css")' media="screen"
+              rel="stylesheet">
         <!-- Main styles for this application-->
         <link href='@routes.Assets.versioned("css/style.css")' rel="stylesheet" media="screen">
         <link href='@routes.Assets.versioned("css/pace-progress/css/pace.min.css")' media="screen" rel="stylesheet">
         <link rel="stylesheet" media="screen" href='@routes.Assets.versioned("css/appstyle.css")'>
         <link rel="shortcut icon" type="image/png" href='@routes.Assets.versioned("images/favicon.png")'>
+
+        <script src='@routes.Assets.versioned("js/jquery/js/jquery.min.js")'></script>
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
         <header class="app-header navbar">
@@ -229,7 +233,6 @@
             </div>
         </footer>
         <!-- CoreUI and necessary plugins-->
-        <script src='@routes.Assets.versioned("js/jquery/js/jquery.min.js")'></script>
         <script src='@routes.Assets.versioned("js/popper.js/js/popper.min.js")'></script>
         <script src='@routes.Assets.versioned("js/bootstrap/js/bootstrap.min.js")'></script>
         <script src='@routes.Assets.versioned("js/pace-progress/js/pace.min.js")'></script>

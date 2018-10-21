@@ -102,10 +102,8 @@
                               data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
                               data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
                               data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
-                              data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
-                              data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
                               data-toggle="tooltip" data-html="true"
-                              title='@Messages("app.validation.txt1")@Messages("app.desc")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'> @f("description").getValue().orElse("")</textarea>
+                              title='@Messages("app.validation.txt1")@Messages("app.desc")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'> @f("description").getValue().orElse("")</textarea>
                     <div class="invalid-feedback">
                         @for(error <- f("description").errors) {
                         @error.format(messages())

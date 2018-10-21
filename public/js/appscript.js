@@ -5,9 +5,9 @@ $("form.parsley-validation").parsley({
     errorTemplate: '<div></div>',
     trigger: 'change'
 }).on('field:validated', function(fieldInstance) {
+    $('#loader').modal('hide');
     var ok = $('.parsley-error').length === 0;
     if (!ok){
-        $('#loader').modal('hide');
         if (fieldInstance.$element.is(":hidden")) {
             fieldInstance._ui.$errorsWrapper.css('display', 'none');
             fieldInstance.validationResult = true;
@@ -22,8 +22,14 @@ $("form.parsley-validation").parsley({
 $(document).ready(function(){
     $('#loader').modal('hide');
     showHideUserOpt();
+    //loadDatePicker();
     $('[data-toggle="tooltip"]').tooltip();
 });
+function loadDatePicker(){
+    $('.datepicker').datepicker().on('onClose', function(e) {
+       $(this).parsley().validate();
+     });
+}
 function showLoader(){
 $('#loader').modal('show');
 }
@@ -52,8 +58,8 @@ function showTime(){
     m = (m < 10) ? "0" + m : m;
     s = (s < 10) ? "0" + s : s;
     var time = h + ":" + m + ":" + s + " " + session;
-    document.getElementById("MyClockDisplay").innerText = time;
-    document.getElementById("MyClockDisplay").textContent = time;
+    document.getElementById("boardClock").innerText = time;
+    document.getElementById("boardClock").textContent = time;
     setTimeout(showTime, 1000);
 }
 

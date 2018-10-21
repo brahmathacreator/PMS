@@ -18,8 +18,10 @@ create table comments (
   comment_id                    bigint auto_increment not null,
   subject                       varchar(255),
   comment_by_name               varchar(255),
-  description                   varchar(255),
+  description                   text,
   attachment                    varchar(255),
+  start_date                    datetime(6),
+  end_date                      datetime(6),
   projectid                     bigint not null,
   constraint pk_comments primary key (comment_id)
 );
@@ -50,19 +52,15 @@ create table project (
   project_title                 varchar(255),
   project_title_desc            varchar(255),
   logo                          varchar(255),
-  description                   varchar(255),
+  description                   text,
   project_creation_dt           datetime(6),
   duration                      integer,
   school_id                     bigint not null,
   batch_id                      bigint not null,
   section_id                    bigint not null,
+  final_description             varchar(255),
+  zipped_comments               varchar(255),
   constraint pk_project primary key (project_id)
-);
-
-create table project_user (
-  project_project_id            bigint not null,
-  user_user_key                 bigint not null,
-  constraint pk_project_user primary key (project_project_id,user_user_key)
 );
 
 create table school (
@@ -86,6 +84,20 @@ create table section (
   constraint pk_section primary key (section_id)
 );
 
+create table sub_comments (
+  sub_comment_id                bigint auto_increment not null,
+  subject                       varchar(255),
+  comment_by_name               varchar(255),
+  description                   text,
+  attachment                    varchar(255),
+  start_date                    datetime(6),
+  end_date                      datetime(6),
+  actual_end_date               datetime(6),
+  marked_flag                   integer not null,
+  commentid                     bigint not null,
+  constraint pk_sub_comments primary key (sub_comment_id)
+);
+
 create table user (
   user_key                      bigint auto_increment not null,
   user_id                       varchar(255),
@@ -104,12 +116,6 @@ create table user (
   constraint pk_user primary key (user_key)
 );
 
-create table user_project (
-  user_user_key                 bigint not null,
-  project_project_id            bigint not null,
-  constraint pk_user_project primary key (user_user_key,project_project_id)
-);
-
 create table user_role (
   role_id                       bigint auto_increment not null,
   role_name                     varchar(255),
@@ -125,17 +131,8 @@ create index ix_comments_projectid on comments (projectid);
 
 alter table password add constraint fk_password_userkey foreign key (userkey) references user (user_key) on delete restrict on update restrict;
 
-alter table project_user add constraint fk_project_user_project foreign key (project_project_id) references project (project_id) on delete restrict on update restrict;
-create index ix_project_user_project on project_user (project_project_id);
-
-alter table project_user add constraint fk_project_user_user foreign key (user_user_key) references user (user_key) on delete restrict on update restrict;
-create index ix_project_user_user on project_user (user_user_key);
-
-alter table user_project add constraint fk_user_project_user foreign key (user_user_key) references user (user_key) on delete restrict on update restrict;
-create index ix_user_project_user on user_project (user_user_key);
-
-alter table user_project add constraint fk_user_project_project foreign key (project_project_id) references project (project_id) on delete restrict on update restrict;
-create index ix_user_project_project on user_project (project_project_id);
+alter table sub_comments add constraint fk_sub_comments_commentid foreign key (commentid) references comments (comment_id) on delete restrict on update restrict;
+create index ix_sub_comments_commentid on sub_comments (commentid);
 
 alter table user_role add constraint fk_user_role_userkey foreign key (userkey) references user (user_key) on delete restrict on update restrict;
 
@@ -147,17 +144,8 @@ drop index ix_comments_projectid on comments;
 
 alter table password drop foreign key fk_password_userkey;
 
-alter table project_user drop foreign key fk_project_user_project;
-drop index ix_project_user_project on project_user;
-
-alter table project_user drop foreign key fk_project_user_user;
-drop index ix_project_user_user on project_user;
-
-alter table user_project drop foreign key fk_user_project_user;
-drop index ix_user_project_user on user_project;
-
-alter table user_project drop foreign key fk_user_project_project;
-drop index ix_user_project_project on user_project;
+alter table sub_comments drop foreign key fk_sub_comments_commentid;
+drop index ix_sub_comments_commentid on sub_comments;
 
 alter table user_role drop foreign key fk_user_role_userkey;
 
@@ -171,15 +159,13 @@ drop table if exists password;
 
 drop table if exists project;
 
-drop table if exists project_user;
-
 drop table if exists school;
 
 drop table if exists section;
 
-drop table if exists user;
+drop table if exists sub_comments;
 
-drop table if exists user_project;
+drop table if exists user;
 
 drop table if exists user_role;
 
