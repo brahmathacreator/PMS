@@ -22,6 +22,7 @@ create table comments (
   attachment                    varchar(255),
   start_date                    datetime(6),
   end_date                      datetime(6),
+  actual_end_date               datetime(6),
   projectid                     bigint not null,
   constraint pk_comments primary key (comment_id)
 );

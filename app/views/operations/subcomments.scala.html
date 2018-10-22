@@ -2,25 +2,35 @@
 @layout.main(curdOpt, activeMenu){
 <div class="row">
     <div class="col-md-12">
-        <ul class="list-unstyled">
-            <li class="media my-4">
-                <img class="align-self-center mr-3 commentImgSize"
-                     src='@routes.Assets.versioned("uploads/logo/user.png")' alt="image">
-                <div class="media-body">
-                    <h5 class="mt-0 mb-1">@comment.getCommentByName()
-                        <small class="mt-0 mb-1">@comment.getSubject()</small>
-                    </h5>
-                    @comment.getDescription()
-                    <br/>
-                    @Messages("app.comments.attachment"): &nbsp;
-                    @if("-NA-".contains(comment.getAttachment())){
-                    @Messages("app.na")
-                    }else{
-                    <a href="@comment.getAttachment()">@Messages("app.comments.download")</a>
-                    }
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a class="btn">
+                            <i class="fa fa-comments fa-lg"></i>
+                             @comment.getCommentByName()
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <a class="btn float-right" onclick="return showLoader();"
+                           href='@controllers.operational.routes.CommentOps.selectRecord(3, activeMenu, projectId)'>
+                            <i class="fa fa-chevron-circle-left fa-lg"></i>
+                             @Messages("app.back")
+                        </a>
+                    </div>
                 </div>
-            </li>
-        </ul>
+
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@comment.getSubject()</h5>
+                <p class="card-text">@comment.getDescription()</p>
+                @if("-NA-".contains(comment.getAttachment())){
+                @Messages("app.comments.attachment"): &nbsp;@Messages("app.na")
+                }else{
+                <a href="@comment.getAttachment()" class="btn btn-primary">@Messages("app.comments.download")</a>
+                }
+            </div>
+        </div>
     </div>
     <div class="col-md-12">
         <ul class="list-unstyled">
@@ -41,8 +51,58 @@
                     }else{
                     <a href="@obj.getAttachment()">@Messages("app.comments.download")</a>
                     }
-                    @if("2".equals(session.get("SESSION_ROLE_TYPE")) && obj.getCommentByName().contains(session.get("SESSION_USER_NAME"))){
-                    asas
+                    <br/>
+                    @if("2".equals(session.get("SESSION_ROLE_TYPE")) &&
+                    !obj.getCommentByName().contains((session.get("SESSION_USER_NAME")+"_"+session.get("SESSION_USER_KEY")))){
+                    @if(obj.getMarkedFlag() == 1){
+                    @Messages("app.comments.final.marking")&nbsp;@Messages("app.yes")
+                    }else if(obj.getMarkedFlag() == 2){
+                    @Messages("app.comments.final.marking")&nbsp;@Messages("app.no")
+                    }else{
+                    <form id="frm2" name="frm2"
+                          action="@controllers.operational.routes.SubCommentOps.updateMarkFlag(2, activeMenu)"
+                          class="parsley-validation form-inline" method="POST">
+                        @helper.CSRF.formField
+                        <input type="hidden" name="subCommentId" value='@obj.getSubCommentId()'/>
+                        <input type="hidden" name="commentId" value='@comment.getCommentId()'/>
+                        <input type="hidden" name="projectId" value='@projectId'/>
+                        <div class="form-group">
+                            <label class="col-md-3 col-form-label"
+                                   for="markedFlag">@Messages("app.comments.final.marking")</label>
+                            &nbsp;&nbsp;
+                            <select class='form-control form-control-sm custom-select' id="markedFlag" name="markedFlag"
+                                    autocomplete="off" required="required"
+                                    data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                    data-toggle="tooltip" data-html="true"
+                                    title='@Messages("app.validation.txt1")@Messages("app.admin.registration.user.type")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                                <option value="">@Messages("app.select")</option>
+                                @if(obj.getMarkedFlag() == 1){
+                                <option value="1" selected='selected'>
+                                    @Messages("app.yes")
+                                </option>
+                                }else {
+                                <option value="1">
+                                    @Messages("app.yes")
+                                </option>
+                                }
+                                @if(obj.getMarkedFlag() == 2){
+                                <option value="2" selected='selected'>
+                                    @Messages("app.no")
+                                </option>
+                                }else {
+                                <option value="2">
+                                    @Messages("app.no")
+                                </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-success " type="submit">
+                                <i class="fa fa-dot-circle-o"></i> @Messages("app.submit")
+                            </button>
+                        </div>
+                    </form>
+                    }
                     }
                 </div>
             </li>

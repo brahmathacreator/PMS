@@ -45,7 +45,7 @@ app.desc = Description
 app.record.created.successfully = Record created successfully.
 app.record.updated.successfully = Record updated successfully.
 app.record.deleted.successfully = Record deleted successfully.
-
+app.back = Back
 
 #Main Layout
 app.layout.main.user.type = User type
@@ -145,7 +145,7 @@ app.comments.note = Note
 app.comments.start.date = Start Date
 app.comments.end.date = End Date
 app.comments.actual.end.date = Actual End Date
-app.comments.final.marking = Mark as eligible
+app.comments.final.marking = Eligible
 
 
 

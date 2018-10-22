@@ -31,6 +31,8 @@ public class Comments extends Model {
     @Formats.DateTime(pattern = "MM/dd/yyyy")
     @Constraints.Required
     private Date endDate;
+    @Formats.DateTime(pattern = "MM/dd/yyyy")
+    private Date actualEndDate;
 
 
     @Transient
@@ -127,5 +129,13 @@ public class Comments extends Model {
 
     public void setSubComments(List<SubComments> subComments) {
         this.subComments = subComments;
+    }
+
+    public Date getActualEndDate() {
+        return actualEndDate;
+    }
+
+    public void setActualEndDate(Date actualEndDate) {
+        this.actualEndDate = actualEndDate;
     }
 }

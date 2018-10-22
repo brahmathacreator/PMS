@@ -49,14 +49,17 @@ GET     /project                      controllers.operational.ProjectOps.index(c
 GET     /projectsearch                controllers.operational.ProjectOps.search(curdOpt: Integer, activeMenu: String, currentPage: Integer, searchBy: String, searchValue: String, currentSortBy: String, currentOrder: String)
 GET     /projectselectrecord          controllers.operational.ProjectOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
 POST    /projectselectrecord          controllers.operational.ProjectOps.curdOperations(curdOpt: Integer, activeMenu: String)
+GET     /projectselectrecord          controllers.operational.ProjectOps.completeProject(curdOpt: Integer, activeMenu: String,id: Long)
 
 #Comments Page
 GET     /commentsselectrecord         controllers.operational.CommentOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
 POST    /commentsselectrecord         controllers.operational.CommentOps.curdOperations(curdOpt: Integer, activeMenu: String)
+POST    /commentsupdaterecord         controllers.operational.CommentOps.updateActualDate(curdOpt: Integer, activeMenu: String)
 
 #SubComments Page
 GET     /subcommentsselectrecord         controllers.operational.SubCommentOps.selectRecord(curdOpt: Integer, activeMenu: String, id: Long)
 POST    /subcommentsselectrecord         controllers.operational.SubCommentOps.curdOperations(curdOpt: Integer, activeMenu: String)
+POST    /subcommentsupdaterecord         controllers.operational.SubCommentOps.updateMarkFlag(curdOpt: Integer, activeMenu: String)
 
 
 # Map static resources from the /public folder to the /assets URL path

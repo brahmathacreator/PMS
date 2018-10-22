@@ -145,5 +145,31 @@ public class SubCommentOps extends SessionController implements GenericOps {
         }
     }
 
+    @AddCSRFToken
+    public Result updateMarkFlag(Integer curdOpt, String activeMenu) {
+        Form<Comments> form = null;
+        SubComments subComment = null;
+        try {
+            Logger.debug("Inside [CommentOps][curdOperations]");
+            form = factory.form(Comments.class).bindFromRequest();
+            subComment = new SubComments();
+            subComment.setSubCommentId(Long.parseLong(form.field("subCommentId").getValue().orElse(null)));
+            subComment.setCommentId(Long.parseLong(form.field("commentId").getValue().orElse(null)));
+            subComment.setMarkedFlag(Integer.parseInt(form.field("markedFlag").getValue().orElse(null)));
+            subComment.setProjectId(Long.parseLong(form.field("projectId").getValue().orElse(null)));
+            if (meta.saveSubComments(subComment, curdOpt, ctx())) {
+                flash(Constants.ALERT_SUCCESS, ctx().messages().at("app.record.created.successfully"));
+            } else {
+                flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.0"));
+            }
+            return redirect(routes.CommentOps.selectRecord(Constants.CURD_VIEW, activeMenu, subComment.getProjectId()));
+        } catch (Exception ex) {
+            Logger.error("Error : " + ex);
+            return badRequest(error.render(ctx().messages().at("app.details"), ex));
+        } finally {
+            form = null;
+            subComment = null;
+        }
+    }
 
 }

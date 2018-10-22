@@ -22,6 +22,9 @@ import views.html.operations.comments;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class CommentOps extends SessionController implements GenericOps {
@@ -143,6 +146,35 @@ public class CommentOps extends SessionController implements GenericOps {
             return badRequest(error.render(ctx().messages().at("app.details"), ex));
         } finally {
             form = null;
+        }
+    }
+
+    @AddCSRFToken
+    public Result updateActualDate(Integer curdOpt, String activeMenu) {
+        Form<Comments> form = null;
+        Comments comment = null;
+        DateFormat format = null;
+        try {
+            Logger.debug("Inside [CommentOps][curdOperations]");
+            form = factory.form(Comments.class).bindFromRequest();
+            comment = new Comments();
+            comment.setCommentId(Long.parseLong(form.field("commentId").getValue().orElse(null)));
+            format = new SimpleDateFormat("MM/dd/yyyy");
+            comment.setActualEndDate(format.parse(form.field("actualEndDate").getValue().orElse(null)));
+            comment.setProjectId(Long.parseLong(form.field("projectId").getValue().orElse(null)));
+            if (meta.saveComments(comment, curdOpt, ctx())) {
+                flash(Constants.ALERT_SUCCESS, ctx().messages().at("app.record.created.successfully"));
+            } else {
+                flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.0"));
+            }
+            return redirect(routes.CommentOps.selectRecord(Constants.CURD_VIEW, activeMenu, comment.getProjectId()));
+        } catch (Exception ex) {
+            Logger.error("Error : " + ex);
+            return badRequest(error.render(ctx().messages().at("app.details"), ex));
+        } finally {
+            comment = null;
+            form = null;
+            format = null;
         }
     }
 

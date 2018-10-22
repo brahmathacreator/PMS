@@ -146,17 +146,26 @@ public class ProjectImpl implements ProjectMeta {
         Logger.debug("Inside [ProjectImpl][saveOrEdit]");
         boolean status = false;
         Date d = null;
+        Comments comment = null;
         try {
-            if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME)))
-                object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "]");
-            object.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
-            if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
-                object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
-            object.save();
+            if (curdOpt == Constants.CURD_UPDATE) {
+                comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
+                comment.setActualEndDate(object.getActualEndDate());
+                comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
+                comment.save();
+            } else if (curdOpt == Constants.CURD_SAVE) {
+                if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY)))
+                    object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY) + "]");
+                object.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
+                if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
+                    object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
+                object.save();
+            }
             Logger.info("[ProjectImpl][saveOrEdit] Record saved.");
             status = true;
         } finally {
             d = null;
+            comment = null;
         }
         return status;
     }
@@ -166,19 +175,30 @@ public class ProjectImpl implements ProjectMeta {
         Logger.debug("Inside [ProjectImpl][saveOrEdit]");
         boolean status = false;
         Comments comment = null;
+        SubComments subComment = null;
         Date d = null;
         try {
-            if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME)))
-                object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "]");
-            comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
-            comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
-            object.setComment(comment);
-            if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
-                object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
-            object.save();
+            if (curdOpt == Constants.CURD_SAVE) {
+                if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY)))
+                    object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY) + "]");
+                comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
+                comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
+                object.setComment(comment);
+                if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
+                    object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
+                object.save();
+            } else if (curdOpt == Constants.CURD_UPDATE) {
+                subComment = ebeanServer.find(SubComments.class).where().eq("subCommentId", object.getSubCommentId()).findOne();
+                subComment.setMarkedFlag(object.getMarkedFlag());
+                comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
+                comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
+                subComment.setComment(comment);
+                subComment.save();
+            }
             Logger.info("[ProjectImpl][saveOrEdit] Record saved.");
             status = true;
         } finally {
+            subComment = null;
             comment = null;
             d = null;
         }

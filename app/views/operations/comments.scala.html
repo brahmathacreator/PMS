@@ -16,10 +16,10 @@
                 <p class="card-text">@project.getDescription()</p>
             </div>
             <div class="card-footer text-muted">
-                @Messages("app.project.creation.dt")&nbsp;@project.getProjectCreationDT()&nbsp;@Messages("app.project.duration")&nbsp;@project.getDuration()
+                @Messages("app.project.creation.dt")&nbsp;@project.getProjectCreationDT()&nbsp;|&nbsp;@Messages("app.project.duration")&nbsp;@project.getDuration()
                 &nbsp;|&nbsp;
                 <a onclick="return showLoader();"
-                   href='@controllers.operational.routes.ProjectOps.selectRecord(7, activeMenu, project.getProjectId())'>
+                   href='@controllers.operational.routes.ProjectOps.completeProject(7, activeMenu, project.getProjectId())'>
                     <i class="fa fa-cloud-download"></i>
                      @Messages("app.menu.nav.complete")
                 </a>
@@ -46,15 +46,61 @@
                     <a href="@obj.getAttachment()">@Messages("app.comments.download")</a>
                     }
                     <br/>
-                    @Messages("app.comments.start.date")&nbsp;@obj.getStartDate()
+                    @Messages("app.comments.start.date")&nbsp;@obj.getStartDate().format("MM/dd/yyyy")
                     <br/>
-                    @Messages("app.comments.end.date")&nbsp;@obj.getEndDate()
+                    @Messages("app.comments.end.date")&nbsp;@obj.getEndDate().format("MM/dd/yyyy")
                     <br/>
                     <a onclick="return showLoader();"
                        href='@controllers.operational.routes.SubCommentOps.selectRecord(7, activeMenu, obj.getCommentId())'>
                         <i class="fa fa-plus-square"></i>
                          @Messages("app.comments.note")
                     </a>
+                    <br/>
+                    @if("2".equals(session.get("SESSION_ROLE_TYPE")) &&
+                    obj.getCommentByName().contains((session.get("SESSION_USER_NAME")+"_"+session.get("SESSION_USER_KEY")))){
+                    @if(obj.getActualEndDate()!=null){
+                    @Messages("app.comments.actual.end.date")&nbsp;@obj.getActualEndDate().format("MM/dd/yyyy")
+                    }else{
+                    <form id="frm2" name="frm2"
+                          action="@controllers.operational.routes.CommentOps.updateActualDate(2, activeMenu)"
+                          class="parsley-validation form-inline" method="POST">
+                        @helper.CSRF.formField
+                        <input type="hidden" name="commentId" value='@obj.getCommentId()'/>
+                        <input type="hidden" name="projectId" value='@project.getProjectId()'/>
+                        <div class="form-group">
+                            <label class="col-md-3 col-form-label"
+                                   for="actualEndDate">@Messages("app.comments.actual.end.date")</label>
+                            <input class='form-control @if(f.getError("actualEndDate").isPresent()){is-invalid}'
+                                   id="actualEndDate" data-provide="datepicker"
+                                   type="text" name="actualEndDate" value='@obj.getActualEndDate()'
+                                   autocomplete="off" data-parsley-trigger="change"
+                                   data-parsley-required="true"
+                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                   data-toggle="tooltip" data-html="true"
+                                   title='@Messages("app.validation.txt1")@Messages("app.comments.actual.end.date")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                            <script>
+                                $('#actualEndDate').datepicker({
+                                    singleDatePicker: true
+                                }, function (start, end, label) {
+                                    $('#actualEndDate').parsley().validate();
+                                });
+
+
+                            </script>
+                            <div class="invalid-feedback">
+                                @for(error <- f("actualEndDate").errors) {
+                                @error.format(messages())
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-success" type="submit">
+                                <i class="fa fa-dot-circle-o"></i> @Messages("app.submit")
+                            </button>
+                        </div>
+                    </form>
+                    }
+                    }
                 </div>
             </li>
             }
@@ -180,6 +226,10 @@
                                 }, function (start, end, label) {
                                     $('#startDate').parsley().validate();
                                 });
+
+
+
+
                             </script>
                             <div class="invalid-feedback">
                                 @for(error <- f("startDate").errors) {
@@ -206,6 +256,14 @@
                                 }, function (start, end, label) {
                                     $('#endDate').parsley().validate();
                                 });
+
+
+
+
+
+
+
+
                             </script>
                             <div class="invalid-feedback">
                                 @for(error <- f("endDate").errors) {
