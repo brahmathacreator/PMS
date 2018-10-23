@@ -19,10 +19,17 @@
                 @Messages("app.project.creation.dt")&nbsp;@project.getProjectCreationDT()&nbsp;|&nbsp;@Messages("app.project.duration")&nbsp;@project.getDuration()
                 &nbsp;|&nbsp;
                 <a onclick="return showLoader();"
-                   href='@controllers.operational.routes.ProjectOps.completeProject(7, activeMenu, project.getProjectId())'>
+                   href='@controllers.operational.routes.CommentOps.completeProject(3, activeMenu, project.getProjectId())'>
                     <i class="fa fa-cloud-download"></i>
                      @Messages("app.menu.nav.complete")
                 </a>
+                &nbsp;|&nbsp;
+                @Messages("app.comments.final.zip.status"): &nbsp;
+                @if(project.getZippedComments() ==null || "-NA-".contains(project.getZippedComments())){
+                @Messages("app.na")
+                }else{
+                <a href="@project.getZippedComments()">@Messages("app.comments.download")</a>
+                }
             </div>
         </div>
     </div>
@@ -40,7 +47,7 @@
                     @obj.getDescription()
                     <br/>
                     @Messages("app.comments.attachment"): &nbsp;
-                    @if("-NA-".contains(obj.getAttachment())){
+                    @if(obj.getAttachment() ==null || "-NA-".contains(obj.getAttachment())){
                     @Messages("app.na")
                     }else{
                     <a href="@obj.getAttachment()">@Messages("app.comments.download")</a>
@@ -58,8 +65,13 @@
                     <br/>
                     @if("2".equals(session.get("SESSION_ROLE_TYPE")) &&
                     obj.getCommentByName().contains((session.get("SESSION_USER_NAME")+"_"+session.get("SESSION_USER_KEY")))){
-                    @if(obj.getActualEndDate()!=null){
+                    @if(obj.getActualEndDate()!=null && obj.getMarkedFlag() !=0){
                     @Messages("app.comments.actual.end.date")&nbsp;@obj.getActualEndDate().format("MM/dd/yyyy")
+                    @if(obj.getMarkedFlag() == 1){
+                    @Messages("app.comments.final.marking")&nbsp;@Messages("app.yes")
+                    }else {
+                    @Messages("app.comments.final.marking")&nbsp;@Messages("app.no")
+                    }
                     }else{
                     <form id="frm2" name="frm2"
                           action="@controllers.operational.routes.CommentOps.updateActualDate(2, activeMenu)"
@@ -92,6 +104,36 @@
                                 @error.format(messages())
                                 }
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-form-label"
+                                   for="markedFlag">@Messages("app.comments.final.marking")</label>
+                            &nbsp;&nbsp;
+                            <select class='form-control form-control-sm custom-select' id="markedFlag" name="markedFlag"
+                                    autocomplete="off" required="required"
+                                    data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                                    data-toggle="tooltip" data-html="true"
+                                    title='@Messages("app.validation.txt1")@Messages("app.admin.registration.user.type")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                                <option value="">@Messages("app.select")</option>
+                                @if(obj.getMarkedFlag() == 1){
+                                <option value="1" selected='selected'>
+                                    @Messages("app.yes")
+                                </option>
+                                }else {
+                                <option value="1">
+                                    @Messages("app.yes")
+                                </option>
+                                }
+                                @if(obj.getMarkedFlag() == 2){
+                                <option value="2" selected='selected'>
+                                    @Messages("app.no")
+                                </option>
+                                }else {
+                                <option value="2">
+                                    @Messages("app.no")
+                                </option>
+                                }
+                            </select>
                         </div>
                         <div class="form-group">
                             <button class="btn btn-sm btn-success" type="submit">

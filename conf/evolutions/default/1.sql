@@ -23,6 +23,7 @@ create table comments (
   start_date                    datetime(6),
   end_date                      datetime(6),
   actual_end_date               datetime(6),
+  marked_flag                   integer not null,
   projectid                     bigint not null,
   constraint pk_comments primary key (comment_id)
 );

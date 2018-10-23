@@ -198,9 +198,4 @@ public class ProjectOps extends SessionController implements GenericOps {
 
     }
 
-    public Result completeProject(Integer curdOpt, String activeMenu, Long id) {
-        return TODO;
-    }
-
-
 }

@@ -14,9 +14,13 @@ import play.db.ebean.Transactional;
 import play.mvc.Http;
 import services.Interface.ProjectMeta;
 import services.Interface.ProjectMeta;
+import services.utils.Zipper;
 
 import javax.inject.Inject;
+import javax.xml.stream.events.Comment;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class ProjectImpl implements ProjectMeta {
@@ -80,12 +84,65 @@ public class ProjectImpl implements ProjectMeta {
             exList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
             exList.add(Expr.eq("batchId", Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
             exList.add(Expr.eq("sectionId", Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
-            exList.add(Expr.eq("schoolId", id));
+            exList.add(Expr.eq("projectId", id));
             optional = Optional.ofNullable(exList.findOne());
             return optional;
         } finally {
             optional = null;
         }
+    }
+
+    @Override
+    public Project completeProjectByKey(Long id, Integer curdOpt) throws Exception {
+        Logger.debug("Inside [ProjectImpl][completeProjectByKey]");
+        Project project;
+        ExpressionList<Project> projExList = null;
+        ExpressionList<Comments> commentsExList = null;
+        ExpressionList<SubComments> subCommentsExList = null;
+        List<Comments> comments = null;
+        List<SubComments> subComments = null;
+        List<String> inputFileNames = null;
+        String fileName = null;
+        try {
+            projExList = ebeanServer.find(Project.class).where();
+            projExList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+            projExList.add(Expr.eq("batchId", Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
+            projExList.add(Expr.eq("sectionId", Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
+            projExList.add(Expr.eq("projectId", id));
+            project = projExList.findOne();
+            if (project != null) {
+                inputFileNames = new ArrayList<String>(1);
+                commentsExList = ebeanServer.find(Comments.class).where();
+                commentsExList.add(Expr.isNotNull("attachment"));
+                commentsExList.add(Expr.eq("markedFlag", Constants.INT_VALUE_1));
+                commentsExList.add(Expr.eq("project.projectId", id));
+                comments = commentsExList.findList();
+                if (comments != null && comments.size() > 0) {
+                    for (Comments c : comments) {
+                        subCommentsExList = ebeanServer.find(SubComments.class).where();
+                        subCommentsExList.add(Expr.isNotNull("attachment"));
+                        subCommentsExList.add(Expr.ne("attachment", Constants.NA));
+                        subCommentsExList.add(Expr.eq("markedFlag", Constants.INT_VALUE_1));
+                        subCommentsExList.add(Expr.eq("comment.commentId", c.getCommentId()));
+                        subComments = subCommentsExList.findList();
+                        for (SubComments s : subComments) {
+                            inputFileNames.add(s.getAttachment().replace(Constants.LOC_ASSETS, Constants.LOC_PUPLIC));
+                        }
+                    }
+                }
+            }
+            if (inputFileNames != null && inputFileNames.size() > 0) {
+                fileName = Constants.COMPLETED_FILE_LOC + (Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID) + "_" + Http.Context.current().session().get(Constants.SESSION_BATCH_ID) + "_" + Http.Context.current().session().get(Constants.SESSION_SECTION_ID) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + project.getProjectTitle()) + Constants.COMPLETED_FILE_EXT;
+                if (Zipper.zipMultipleFiles(inputFileNames, Constants.LOC_PUPLIC + fileName)) {
+                    Logger.info("Zipped Successfully [" + fileName + "].");
+                    project.setZippedComments(Constants.LOC_ASSETS + fileName);
+                }
+            }
+            return project;
+        } finally {
+            project = null;
+        }
+
     }
 
     @Override
@@ -151,6 +208,7 @@ public class ProjectImpl implements ProjectMeta {
             if (curdOpt == Constants.CURD_UPDATE) {
                 comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
                 comment.setActualEndDate(object.getActualEndDate());
+                comment.setMarkedFlag(object.getMarkedFlag());
                 comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
                 comment.save();
             } else if (curdOpt == Constants.CURD_SAVE) {

@@ -1,5 +1,7 @@
 package services.utils;
 
+import play.api.Play;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,14 +16,14 @@ public class Zipper {
         FileOutputStream fos = null;
         ZipOutputStream zipOut = null;
         try {
-            fos = new FileOutputStream(outputFileName);
+            fos = new FileOutputStream(Play.current().path().getAbsolutePath() + outputFileName);
             zipOut = new ZipOutputStream(fos);
             for (String srcFile : inputFiles) {
                 File fileToZip = null;
                 FileInputStream fis = null;
                 ZipEntry zipEntry = null;
                 try {
-                    fileToZip = new File(srcFile);
+                    fileToZip = new File(Play.current().path().getAbsolutePath() + srcFile);
                     fis = new FileInputStream(fileToZip);
                     zipEntry = new ZipEntry(fileToZip.getName());
                     zipOut.putNextEntry(zipEntry);
@@ -36,9 +38,9 @@ public class Zipper {
                     fis = null;
                     zipEntry = null;
                 }
-                zipOut.close();
-                fos.close();
             }
+            zipOut.close();
+            fos.close();
             status = true;
         } finally {
             fos = null;

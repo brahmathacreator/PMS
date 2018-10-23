@@ -29,6 +29,10 @@ public class Constants {
     public static final String ASSETS_USER_LOGO_LOC = "/assets/uploads/logo/";
     public static final String ASSETS_USER_ATTACHMENT_LOC = "/assets/uploads/attachments/";
     public static final String ASSETS_BLOG_LOGO = "/assets/uploads/logo/project.jpg";
+    public static final String LOC_PUPLIC = "/public/";
+    public static final String LOC_ASSETS = "/assets/";
+    public static final String COMPLETED_FILE_LOC = "uploads/completed/";
+    public static final String COMPLETED_FILE_EXT = ".zip";
 
     public static final Integer CURD_SAVE = 1;
     public static final Integer CURD_UPDATE = 2;

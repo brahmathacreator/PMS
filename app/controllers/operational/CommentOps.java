@@ -70,6 +70,29 @@ public class CommentOps extends SessionController implements GenericOps {
         }
     }
 
+    public Result completeProject(Integer curdOpt, String activeMenu, Long id) {
+        Logger.debug("Inside [CommentOps][index]");
+        Project project = null;
+        Form<Comments> form = null;
+        try {
+            project = meta.completeProjectByKey(id, curdOpt);
+            if (project == null) {
+                flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.9"));
+                return redirect(routes.ProjectOps.index(Constants.CURD_VIEW_ALL, activeMenu));
+            }
+            form = factory.form(Comments.class);
+            if (project.getLogo() == null || project.getLogo().trim().isEmpty())
+                project.setLogo(Constants.ASSETS_BLOG_LOGO);
+            return ok(comments.render(curdOpt, activeMenu, project, form));
+        } catch (Exception ex) {
+            Logger.error("Error : " + ex);
+            return badRequest(error.render(ctx().messages().at("app.details"), ex));
+        } finally {
+            project = null;
+            form = null;
+        }
+    }
+
     @Override
     @AddCSRFToken
     @BodyParser.Of(MultipartFormDataHandler.class)
@@ -162,6 +185,7 @@ public class CommentOps extends SessionController implements GenericOps {
             format = new SimpleDateFormat("MM/dd/yyyy");
             comment.setActualEndDate(format.parse(form.field("actualEndDate").getValue().orElse(null)));
             comment.setProjectId(Long.parseLong(form.field("projectId").getValue().orElse(null)));
+            comment.setMarkedFlag(Integer.parseInt(form.field("markedFlag").getValue().orElse(null)));
             if (meta.saveComments(comment, curdOpt, ctx())) {
                 flash(Constants.ALERT_SUCCESS, ctx().messages().at("app.record.created.successfully"));
             } else {

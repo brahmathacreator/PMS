@@ -142,10 +142,11 @@ app.comments.no.comments = No comments available
 app.comments.no.comments.desc = Please add some comments to view.
 app.comments.download = Download
 app.comments.note = Note
-app.comments.start.date = Start Date
-app.comments.end.date = End Date
-app.comments.actual.end.date = Actual End Date
+app.comments.start.date = Start date
+app.comments.end.date = End date
+app.comments.actual.end.date = Actual end date
 app.comments.final.marking = Eligible
+app.comments.final.zip.status = Zip creation status
 
 
 
@@ -220,7 +221,7 @@ app.menu.nav.add = Add
 app.menu.nav.edit = Edit
 app.menu.nav.view = View
 app.menu.nav.delete = Delete
-app.menu.nav.complete = Complete
+app.menu.nav.complete = Zip Project
 app.menu.nav.all = All
 app.menu.dashboard = Home
 app.menu.administration = Administration

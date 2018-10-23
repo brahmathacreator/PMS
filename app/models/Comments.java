@@ -33,6 +33,7 @@ public class Comments extends Model {
     private Date endDate;
     @Formats.DateTime(pattern = "MM/dd/yyyy")
     private Date actualEndDate;
+    private int markedFlag;
 
 
     @Transient
@@ -137,5 +138,13 @@ public class Comments extends Model {
 
     public void setActualEndDate(Date actualEndDate) {
         this.actualEndDate = actualEndDate;
+    }
+
+    public int getMarkedFlag() {
+        return markedFlag;
+    }
+
+    public void setMarkedFlag(int markedFlag) {
+        this.markedFlag = markedFlag;
     }
 }

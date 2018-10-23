@@ -46,7 +46,7 @@
                     @obj.getDescription()
                     <br/>
                     @Messages("app.comments.attachment"): &nbsp;
-                    @if("-NA-".contains(obj.getAttachment())){
+                    @if(obj.getAttachment() ==null || "-NA-".contains(obj.getAttachment())){
                     @Messages("app.na")
                     }else{
                     <a href="@obj.getAttachment()">@Messages("app.comments.download")</a>

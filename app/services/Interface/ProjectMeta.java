@@ -18,4 +18,6 @@ public interface ProjectMeta extends Generic<Project> {
 
     boolean saveSubComments(SubComments object, Integer curdOpt, Http.Context ctx) throws Exception;
 
+    Project completeProjectByKey(Long id, Integer curdOpt) throws Exception;
+
 }
