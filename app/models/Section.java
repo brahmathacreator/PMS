@@ -26,9 +26,10 @@ public class Section extends Model {
     @Constraints.Required
     @Constraints.Email
     private String sectionInchargeEmail;
-    @Constraints.Required
     @Constraints.Pattern(Validation.app_phone_pattern)
     private String sectionInchargePhone;
+    private Long schoolId;
+    private Long createdBy;
 
     public Section() {
     }
@@ -79,5 +80,21 @@ public class Section extends Model {
 
     public void setSectionInchargePhone(String sectionInchargePhone) {
         this.sectionInchargePhone = sectionInchargePhone;
+    }
+
+    public Long getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(Long schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
     }
 }

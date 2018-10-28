@@ -9,6 +9,7 @@ import play.Logger;
 import play.db.ebean.EbeanConfig;
 import play.mvc.Http;
 import services.Interface.BatchMeta;
+
 import javax.inject.Inject;
 import java.util.Optional;
 
@@ -37,6 +38,8 @@ public class BatchImpl implements BatchMeta {
                 exList.add(Expr.ilike(filter.getSearchColumn(), "%" + filter.getSearchValue() + "%"));
             if (filter.getOrderByColumn() != null && !filter.getOrderByColumn().isEmpty() && filter.getOrderByValue() != null && !filter.getOrderByValue().isEmpty())
                 exList.orderBy(filter.getOrderByColumn() + " " + filter.getOrderByValue());
+            exList.add(Expr.ilike("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+            exList.add(Expr.ilike("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
             exList.setFirstRow(filter.getCurrentPage() * Validation.DEFAULT_PAGE_SIZE);
             exList.setMaxRows(Validation.DEFAULT_PAGE_SIZE);
             return exList.findPagedList();
@@ -50,7 +53,10 @@ public class BatchImpl implements BatchMeta {
         Logger.debug("Inside [BatchImpl][getDataByKey]");
         Optional<Batch> optional;
         try {
-            optional = Optional.ofNullable((ebeanServer.find(Batch.class).where().eq("batchId", id).findOne()));
+            optional = Optional.ofNullable((ebeanServer.find(Batch.class).where()
+                    .eq("batchId", id)
+                    .eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID))
+                    .eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)).findOne()));
             return optional;
         } finally {
             optional = null;
@@ -68,6 +74,8 @@ public class BatchImpl implements BatchMeta {
         boolean status = false;
         try {
             object.setBatchInchargeEmail(object.getBatchInchargeEmail().toLowerCase());
+            object.setSchoolId(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+            object.setCreatedBy(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
             if (!object.getLogo().contains(Constants.ASSETS_USER_LOGO_LOC))
                 object.setLogo(Constants.ASSETS_USER_LOGO_LOC + object.getLogo());
             if (curdOpt == Constants.CURD_SAVE) {

@@ -25,5 +25,7 @@ public interface UserMeta extends Generic<User> {
 
     Map<Long, String> getAllSections() throws Exception;
 
+    Map<Long, String> getAllStudents() throws Exception;
+
 
 }

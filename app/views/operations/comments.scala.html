@@ -178,57 +178,6 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label"
-                               for="commentByName">@Messages("app.comments.by")</label>
-                        <div class="col-md-9">
-                            <input class='form-control @if(f.getError("commentByName").isPresent()){is-invalid}'
-                                   id="commentByName"
-                                   type="text" name="commentByName" value='@f("commentByName").getValue().orElse("")'
-                                   autocomplete="off"
-                                   required="required"
-                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
-                                   data-parsley-minlength='@Messages("app.generic.alpha.numeric.special.min")'
-                                   data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
-                                   data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
-                                   data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
-                                   data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
-                                   data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
-                                   data-toggle="tooltip" data-html="true"
-                                   title='@Messages("app.validation.txt1")@Messages("app.comments.by")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'>
-                            <div class="invalid-feedback">
-                                @for(error <- f("commentByName").errors) {
-                                @error.format(messages())
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label"
-                               for="subject">@Messages("app.comments.subject")</label>
-                        <div class="col-md-9">
-                            <input class='form-control @if(f.getError("subject").isPresent()){is-invalid}'
-                                   id="subject"
-                                   type="text" name="subject"
-                                   value='@f("subject").getValue().orElse("")'
-                                   autocomplete="off"
-                                   required="required"
-                                   data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
-                                   data-parsley-minlength='@Messages("app.generic.alpha.numeric.special.min")'
-                                   data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")'
-                                   data-parsley-maxlength='@Messages("app.generic.alpha.numeric.special.max")'
-                                   data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")'
-                                   data-parsley-pattern='@Messages("app.generic.alpha.numeric.special.pattern")'
-                                   data-parsley-pattern-message='@Messages("app.generic.alpha.numeric.special.desc")'
-                                   data-toggle="tooltip" data-html="true"
-                                   title='@Messages("app.validation.txt1")@Messages("app.comments.subject")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.generic.alpha.numeric.special.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.generic.alpha.numeric.special.max")@Messages("app.validation.txt3")<br>@Messages("app.generic.alpha.numeric.special.desc")'>
-                            <div class="invalid-feedback">
-                                @for(error <- f("subject").errors) {
-                                @error.format(messages())
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label"
                                for="description">@Messages("app.desc")</label>
                         <div class="col-md-9">
                             <textarea class='form-control @if(f.getError("description").isPresent()){is-invalid}'

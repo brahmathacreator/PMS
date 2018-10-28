@@ -14,6 +14,7 @@ public class PageFilter {
     private Map<Long, String> schools = new HashMap<Long, String>();
     private Map<Long, String> batches = new HashMap<Long, String>();
     private Map<Long, String> sections = new HashMap<Long, String>();
+    private Map<Long, String> users = new HashMap<Long, String>();
 
     public PageFilter() {
     }
@@ -80,5 +81,13 @@ public class PageFilter {
 
     public void setSections(Map<Long, String> sections) {
         this.sections = sections;
+    }
+
+    public Map<Long, String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Map<Long, String> users) {
+        this.users = users;
     }
 }

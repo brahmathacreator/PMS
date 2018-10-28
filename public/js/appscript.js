@@ -36,7 +36,7 @@ $('#loader').modal('show');
 
 function showHideUserOpt() {
 $('.linkDiv1').hide();
-if($('#roleType').val()==2 || $('#roleType').val()==3){
+if($('#roleType').val()==2){
     $('.linkDiv1').show();
 }
 }

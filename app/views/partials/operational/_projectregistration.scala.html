@@ -1,4 +1,4 @@
-@(curdOpt: Integer, activeMenu: String, action: Object, f: Form[Project])
+@(curdOpt: Integer, activeMenu: String, action: Object, f: Form[Project],filter: dto.PageFilter)
 
 <form id="frm1" name="frm1" action="@action" class="parsley-validation" method="POST" enctype="multipart/form-data">
     @helper.CSRF.formField
@@ -29,6 +29,41 @@
         </div>
         <input type="hidden" name="projectId" id="projectId" value='@f("projectId").getValue().orElse("")'/>
         <div class="card-body">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label"
+                       for="studentId">@Messages("app.project.student")</label>
+                <div class="col-md-9">
+                    @if(curdOpt == 1 || curdOpt == 2){
+                    <select class='form-control custom-select' id="studentId" name="studentId"
+                            autocomplete="off" required="required"
+                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                            data-toggle="tooltip" data-html="true"
+                            title='@Messages("app.validation.txt1")@Messages("app.project.student")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
+                        <option value="">@Messages("app.select")</option>
+                        @for( (key, value) <- filter.getUsers()) {
+                        @if((key+"").equals(f("studentId").getValue().orElse(""))){
+                        <option value="@key" selected="selected">@value</option>
+                        }else {
+                        <option value="@key">@value</option>
+                        }
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        @for(error <- f("studentId").errors) {
+                        @error.format(messages())
+                        }
+                    </div>
+                    }else{
+                    <p>
+                        @for( (key, value) <- filter.getUsers()) {
+                        @if((key+"").equals(f("studentId").getValue().orElse(""))){
+                        @value
+                        }
+                        }
+                    </p>
+                    }
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-md-3 col-form-label"
                        for="projectTitle">@Messages("app.project.name")</label>

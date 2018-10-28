@@ -53,27 +53,25 @@ public class UserImpl implements UserMeta {
 
     @Override
     public PagedList<User> getAllData(PageFilter filter) throws Exception {
-        ExpressionList<User> exList = null;
-        try {
-            exList = ebeanServer.find(User.class).where();
-            if (filter.getSearchColumn() != null && !filter.getSearchColumn().isEmpty() && filter.getSearchValue() != null && !filter.getSearchValue().isEmpty())
-                exList.add(Expr.ilike(filter.getSearchColumn(), "%" + filter.getSearchValue() + "%"));
-            if (filter.getOrderByColumn() != null && !filter.getOrderByColumn().isEmpty() && filter.getOrderByValue() != null && !filter.getOrderByValue().isEmpty())
-                exList.orderBy(filter.getOrderByColumn() + " " + filter.getOrderByValue());
-            exList.setFirstRow(filter.getCurrentPage() * Validation.DEFAULT_PAGE_SIZE);
-            exList.setMaxRows(Validation.DEFAULT_PAGE_SIZE);
-            return exList.findPagedList();
-        } finally {
-            exList = null;
-        }
+        return null;
     }
 
     @Override
     public Optional<User> getDataByKey(Long id, Integer curdOpt) throws Exception {
         Logger.debug("Inside [UserImpl][getDataByKey]");
+        ExpressionList<User> exList = null;
         Optional<User> optional;
         try {
-            optional = Optional.ofNullable((ebeanServer.find(User.class).where().eq("userKey", id).findOne()));
+            exList = ebeanServer.find(User.class).where();
+            exList.add(Expr.eq("userKey", id));
+            if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_TUTOR + "")) {
+                exList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+                exList.add(Expr.eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
+                exList.add(Expr.eq("roleType", Constants.ROLE_TYPE_STUDENT + ""));
+            } else if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_ADMIN + "")) {
+                exList.add(Expr.or(Expr.eq("roleType", Constants.ROLE_TYPE_ADMIN + ""), Expr.eq("roleType", Constants.ROLE_TYPE_TUTOR + "")));
+            }
+            optional = Optional.ofNullable((exList.findOne()));
             return optional;
         } finally {
             optional = null;
@@ -90,6 +88,13 @@ public class UserImpl implements UserMeta {
                 exList.add(Expr.ilike(filter.getSearchColumn(), "%" + filter.getSearchValue() + "%"));
             if (filter.getOrderByColumn() != null && !filter.getOrderByColumn().isEmpty() && filter.getOrderByValue() != null && !filter.getOrderByValue().isEmpty())
                 exList.orderBy(filter.getOrderByColumn() + " " + filter.getOrderByValue());
+            if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_TUTOR + "")) {
+                exList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+                exList.add(Expr.eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
+                exList.add(Expr.eq("roleType", Constants.ROLE_TYPE_STUDENT + ""));
+            } else if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_ADMIN + "")) {
+                exList.add(Expr.or(Expr.eq("roleType", Constants.ROLE_TYPE_ADMIN + ""), Expr.eq("roleType", Constants.ROLE_TYPE_TUTOR + "")));
+            }
             exList.setFirstRow(filter.getCurrentPage() * Validation.DEFAULT_PAGE_SIZE);
             exList.setMaxRows(Validation.DEFAULT_PAGE_SIZE);
             return exList.findPagedList();
@@ -118,17 +123,21 @@ public class UserImpl implements UserMeta {
         Logger.debug("Inside [UserImpl][authenticateUser]");
         User user = null;
         boolean status = false;
+        Integer roleType = null;
         try {
             user = ebeanServer.find(User.class).where().eq("userId", nav.getUserId().toUpperCase()).findOne();
             status = BCrypt.checkpw(nav.getPassword(), user.getPwdInfo().getPassword());
             if (status) {
                 Http.Context.current().session().put(Constants.SESSION_USER_NAME, user.getUsername());
                 Http.Context.current().session().put(Constants.SESSION_USER_KEY, user.getUserKey() + "");
-                Http.Context.current().session().put(Constants.SESSION_ROLE_TYPE, user.getUserRole().getRoleType() + "");
+                roleType = user.getUserRole().getRoleType();
+                Http.Context.current().session().put(Constants.SESSION_ROLE_TYPE, roleType + "");
                 Http.Context.current().session().put(Constants.SESSION_USER_LOGO, user.getLogo());
                 Http.Context.current().session().put(Constants.SESSION_SCHOOL_ID, user.getSchoolId() + "");
-                Http.Context.current().session().put(Constants.SESSION_BATCH_ID, user.getBatchId() + "");
-                Http.Context.current().session().put(Constants.SESSION_SECTION_ID, user.getSectionId() + "");
+                if (roleType == Constants.ROLE_TYPE_STUDENT) {
+                    Http.Context.current().session().put(Constants.SESSION_SECTION_ID, user.getSectionId() + "");
+                    Http.Context.current().session().put(Constants.SESSION_BATCH_ID, user.getBatchId() + "");
+                }
             }
 
         } finally {
@@ -161,7 +170,9 @@ public class UserImpl implements UserMeta {
         Map<Long, String> map = null;
         List<Batch> list = null;
         try {
-            list = ebeanServer.find(Batch.class).findList();
+            list = ebeanServer.find(Batch.class).where()
+                    .eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID))
+                    .eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)).findList();
             if (list != null) {
                 map = new HashMap<Long, String>();
                 for (Batch obj : list) {
@@ -176,11 +187,35 @@ public class UserImpl implements UserMeta {
     }
 
     @Override
+    public Map<Long, String> getAllStudents() throws Exception {
+        Map<Long, String> map = null;
+        List<User> list = null;
+        try {
+            list = ebeanServer.find(User.class).where()
+                    .eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID))
+                    .eq("roleType", Constants.ROLE_TYPE_STUDENT)
+                    .eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)).findList();
+            if (list != null) {
+                map = new HashMap<Long, String>();
+                for (User obj : list) {
+                    map.put(obj.getUserKey(), obj.getUsername());
+                }
+            }
+            return map;
+        } finally {
+            map = null;
+            list = null;
+        }
+    }
+
+    @Override
     public Map<Long, String> getAllSections() throws Exception {
         Map<Long, String> map = null;
         List<Section> list = null;
         try {
-            list = ebeanServer.find(Section.class).findList();
+            list = ebeanServer.find(Section.class).where()
+                    .eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID))
+                    .eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)).findList();
             if (list != null) {
                 map = new HashMap<Long, String>();
                 for (Section obj : list) {
@@ -248,6 +283,9 @@ public class UserImpl implements UserMeta {
             }
             object.setUserId(object.getUserId().toUpperCase());
             object.setEmail(object.getEmail().toLowerCase());
+            if (Http.Context.current().session().get(Constants.SESSION_USER_KEY) != null) {
+                object.setCreatedBy(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
+            }
             if (!object.getLogo().contains(Constants.ASSETS_USER_LOGO_LOC))
                 object.setLogo(Constants.ASSETS_USER_LOGO_LOC + object.getLogo());
             object.getUserRole().setUser(object);

@@ -26,9 +26,10 @@ public class Batch extends Model {
     @Constraints.Required
     @Constraints.Email
     private String batchInchargeEmail;
-    @Constraints.Required
     @Constraints.Pattern(Validation.app_phone_pattern)
     private String batchInchargePhone;
+    private Long schoolId;
+    private Long createdBy;
     private String logo;
 
     public Batch() {
@@ -90,4 +91,19 @@ public class Batch extends Model {
         this.logo = logo;
     }
 
+    public Long getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(Long schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
 }

@@ -12,9 +12,7 @@ public class SubComments extends Model {
     @Id
     @GeneratedValue
     private Long subCommentId;
-    @Constraints.Required
     private String subject;
-    @Constraints.Required
     private String commentByName;
     @Constraints.Required
     @Lob

@@ -29,6 +29,7 @@ controllers.user.routes.UserOps.search(curdOpt, activeMenu, newPage, searchBy, s
 
 @import views.html.partials.utils._invalidcurd;
 @import views.html.partials.user._otheruserregistration;
+@import views.html.partials.user._studentregistration;
 @layout.main(curdOpt, activeMenu){
 @if(curdOpt == 4){
 <div class="card">
@@ -177,7 +178,11 @@ controllers.user.routes.UserOps.search(curdOpt, activeMenu, newPage, searchBy, s
     </div>
 </div>
 }else if(curdOpt == 1 || curdOpt == 2 || curdOpt == 3 || curdOpt == 5){
+@if("2".equals(session.get("SESSION_ROLE_TYPE"))){
+@_studentregistration(curdOpt, activeMenu, controllers.user.routes.UserOps.curdOperations(curdOpt, activeMenu), f, filter)
+}else{
 @_otheruserregistration(curdOpt, activeMenu, controllers.user.routes.UserOps.curdOperations(curdOpt, activeMenu), f, filter)
+}
 }else{
 @_invalidcurd(curdOpt, activeMenu)
 }

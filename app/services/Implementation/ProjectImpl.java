@@ -4,10 +4,8 @@ import controllers.constants.Constants;
 import controllers.constants.Validation;
 import controllers.dto.PageFilter;
 import io.ebean.*;
-import models.Comments;
+import models.*;
 import models.Project;
-import models.Project;
-import models.SubComments;
 import play.Logger;
 import play.db.ebean.EbeanConfig;
 import play.db.ebean.Transactional;
@@ -49,8 +47,7 @@ public class ProjectImpl implements ProjectMeta {
             if (filter.getOrderByColumn() != null && !filter.getOrderByColumn().isEmpty() && filter.getOrderByValue() != null && !filter.getOrderByValue().isEmpty())
                 exList.orderBy(filter.getOrderByColumn() + " " + filter.getOrderByValue());
             exList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
-            exList.add(Expr.eq("batchId", Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
-            exList.add(Expr.eq("sectionId", Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
+            exList.add(Expr.or(Expr.eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)), Expr.eq("studentId", Http.Context.current().session().get(Constants.SESSION_USER_KEY))));
             exList.setFirstRow(filter.getCurrentPage() * Validation.DEFAULT_PAGE_SIZE);
             exList.setMaxRows(Validation.DEFAULT_PAGE_SIZE);
             return exList.findPagedList();
@@ -79,13 +76,16 @@ public class ProjectImpl implements ProjectMeta {
         Logger.debug("Inside [ProjectImpl][getDataByKey]");
         Optional<Project> optional;
         ExpressionList<Project> exList = null;
+        List<User> users = null;
         try {
             exList = ebeanServer.find(Project.class).where();
             exList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
-            exList.add(Expr.eq("batchId", Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
-            exList.add(Expr.eq("sectionId", Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
+            exList.add(Expr.or(Expr.eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)), Expr.eq("studentId", Http.Context.current().session().get(Constants.SESSION_USER_KEY))));
             exList.add(Expr.eq("projectId", id));
             optional = Optional.ofNullable(exList.findOne());
+            if (optional.isPresent()) {
+                //users = ebeanServer.find(User.class).where();
+            }
             return optional;
         } finally {
             optional = null;
@@ -106,8 +106,7 @@ public class ProjectImpl implements ProjectMeta {
         try {
             projExList = ebeanServer.find(Project.class).where();
             projExList.add(Expr.eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
-            projExList.add(Expr.eq("batchId", Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
-            projExList.add(Expr.eq("sectionId", Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
+            projExList.add(Expr.or(Expr.eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)), Expr.eq("studentId", Http.Context.current().session().get(Constants.SESSION_USER_KEY))));
             projExList.add(Expr.eq("projectId", id));
             project = projExList.findOne();
             if (project != null) {
@@ -159,8 +158,7 @@ public class ProjectImpl implements ProjectMeta {
         try {
             if (curdOpt == Constants.CURD_SAVE) {
                 object.setSchoolId(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
-                object.setBatchId(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_BATCH_ID)));
-                object.setSectionId(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_SECTION_ID)));
+                object.setCreatedBy(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
                 d = new Date();
                 object.setProjectCreationDT(d);
             }
@@ -212,8 +210,7 @@ public class ProjectImpl implements ProjectMeta {
                 comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
                 comment.save();
             } else if (curdOpt == Constants.CURD_SAVE) {
-                if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY)))
-                    object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY) + "]");
+                object.setCommentByName(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY));
                 object.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
                 if (!Constants.NA.contains(object.getAttachment()) && !object.getAttachment().contains(Constants.ASSETS_USER_ATTACHMENT_LOC))
                     object.setAttachment(Constants.ASSETS_USER_ATTACHMENT_LOC + object.getAttachment());
@@ -237,8 +234,7 @@ public class ProjectImpl implements ProjectMeta {
         Date d = null;
         try {
             if (curdOpt == Constants.CURD_SAVE) {
-                if (!object.getCommentByName().contains(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY)))
-                    object.setCommentByName(object.getCommentByName() + " [" + Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY) + "]");
+                object.setCommentByName(Http.Context.current().session().get(Constants.SESSION_USER_NAME) + "_" + Http.Context.current().session().get(Constants.SESSION_USER_KEY));
                 comment = ebeanServer.find(Comments.class).where().eq("commentId", object.getCommentId()).findOne();
                 comment.setProject(ebeanServer.find(Project.class).where().eq("projectId", object.getProjectId()).findOne());
                 object.setComment(comment);

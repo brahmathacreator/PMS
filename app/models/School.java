@@ -26,7 +26,6 @@ public class School extends Model {
     @Constraints.Required
     @Constraints.Email
     private String contactPersonEmail;
-    @Constraints.Required
     @Constraints.Pattern(Validation.app_phone_pattern)
     private String contactPersonPhone;
     private String logo;

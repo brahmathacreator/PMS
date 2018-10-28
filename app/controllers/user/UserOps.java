@@ -201,8 +201,10 @@ public class UserOps extends Controller implements GenericOps {
             }
             filter = new PageFilter();
             filter.setSchools(userMeta.getAllSchools());
-            filter.setBatches(userMeta.getAllBatchs());
-            filter.setSections(userMeta.getAllSections());
+            if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_TUTOR + "")) {
+                filter.setBatches(userMeta.getAllBatchs());
+                filter.setSections(userMeta.getAllSections());
+            }
             form = factory.form(User.class).fill(object);
             return ok(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
         } catch (Exception ex) {
@@ -231,8 +233,10 @@ public class UserOps extends Controller implements GenericOps {
         try {
             filter = new PageFilter();
             filter.setSchools(userMeta.getAllSchools());
-            filter.setBatches(userMeta.getAllBatchs());
-            filter.setSections(userMeta.getAllSections());
+            if (Http.Context.current().session().get(Constants.SESSION_ROLE_TYPE).equals(Constants.ROLE_TYPE_TUTOR + "")) {
+                filter.setBatches(userMeta.getAllBatchs());
+                filter.setSections(userMeta.getAllSections());
+            }
             form = factory.form(User.class).bindFromRequest();
             if (form.hasErrors() && curdOpt != Constants.CURD_DELETE) {
                 return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
@@ -250,15 +254,21 @@ public class UserOps extends Controller implements GenericOps {
                         flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.12"));
                         return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
                     }
-                    if (object.getBatchId() == null || object.getBatchId() == 0) {
-                        flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.13"));
-                        return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
+                    if (object.getRoleType() == Constants.ROLE_TYPE_STUDENT) {
+                        if (object.getStudentId() == null || object.getStudentId().trim().isEmpty()) {
+                            flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.16"));
+                            return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
+                        }
+                        if (object.getStudentLevel() == null || object.getStudentLevel() == 0) {
+                            flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.17"));
+                            return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
+                        }
+                        if (object.getProjectStatus() == null || object.getProjectStatus() == 0) {
+                            flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.18"));
+                            return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
+                        }
                     }
-                    if (object.getSectionId() == null || object.getSectionId() == 0) {
-                        flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.14"));
-                        return badRequest(user.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
-                    }
-                    Logger.info("[UserOps][curdOperations]:[School / Batch / Section]:[" + object.getSchoolId() + "/" + object.getBatchId() + "/" + object.getSectionId() + "]");
+                    Logger.info("[UserOps][curdOperations]:[School]:[" + object.getSchoolId() + "]");
                 } else {
                     Logger.info("[UserOps][curdOperations]:[Admin User]");
                 }

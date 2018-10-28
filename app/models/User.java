@@ -26,11 +26,13 @@ public class User extends Model {
     @Constraints.Required
     @Constraints.Pattern(Validation.app_generic_alpha_numeric_pattern)
     private String username;
+    private String studentId;
+    private Integer projectStatus;
+    private Integer studentLevel;
     @Constraints.Required
     @Constraints.Email
     @Column(unique = true)
     private String email;
-    @Constraints.Required
     @Constraints.Pattern(Validation.app_phone_pattern)
     private String phone;
     private String logo;
@@ -45,6 +47,8 @@ public class User extends Model {
     private Long batchId;
     @Column(columnDefinition = "integer default 0")
     private Long sectionId;
+    @Column(columnDefinition = "integer default 0")
+    private Long createdBy;
 
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
@@ -154,6 +158,30 @@ public class User extends Model {
         this.schoolId = schoolId;
     }
 
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public Integer getProjectStatus() {
+        return projectStatus;
+    }
+
+    public void setProjectStatus(Integer projectStatus) {
+        this.projectStatus = projectStatus;
+    }
+
+    public Integer getStudentLevel() {
+        return studentLevel;
+    }
+
+    public void setStudentLevel(Integer studentLevel) {
+        this.studentLevel = studentLevel;
+    }
+
     public Long getBatchId() {
         return batchId;
     }
@@ -170,4 +198,11 @@ public class User extends Model {
         this.sectionId = sectionId;
     }
 
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
 }

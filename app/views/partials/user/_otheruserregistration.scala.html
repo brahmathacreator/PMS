@@ -104,16 +104,14 @@
                 <div class="col-md-9">
                     @if(curdOpt == 1 || curdOpt == 2){
                     <input class='form-control  @if(f.getError("phone").isPresent()){is-invalid}' id="phone" type="text"
-                           name="phone" value='@f("phone").getValue().orElse("")' autocomplete="off" required="required"
-                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
-                           data-parsley-minlength='@Messages("app.phone.min")'
+                           name="phone" value='@f("phone").getValue().orElse("")' autocomplete="off" data-parsley-minlength='@Messages("app.phone.min")'
                            data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")'
                            data-parsley-maxlength='@Messages("app.phone.max")'
                            data-parsley-maxlength-message='@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")'
                            data-parsley-pattern='@Messages("app.phone.pattern")'
                            data-parsley-pattern-message='@Messages("app.phone.desc")'
                            data-toggle="tooltip" data-html="true"
-                           title='@Messages("app.validation.txt1")@Messages("app.admin.registration.phone")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")<br>@Messages("app.phone.desc")'>
+                           title='@Messages("app.validation.txt1")@Messages("app.admin.registration.phone")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.no")<br>@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")<br>@Messages("app.phone.desc")'>
                     <div class="invalid-feedback">
                         @for(error <- f("phone").errors) {
                         @error.format(messages())
@@ -155,17 +153,6 @@
                         </option>
                         }
                         }
-                        @if("1".equals(session.get("SESSION_ROLE_TYPE"))){
-                        @if(f("roleType").getValue().orElse("").equals("3")){
-                        <option value="3" selected='selected'>
-                            @Messages("app.user.registration.user.type.student")
-                        </option>
-                        }else{
-                        <option value="3">
-                            @Messages("app.user.registration.user.type.student")
-                        </option>
-                        }
-                        }
                     </select>
                     <div class="invalid-feedback">
                         @for(error <- f("roleType").errors) {
@@ -178,8 +165,6 @@
                         @Messages("app.user.registration.user.type.admin")
                         }else if(f("roleType").getValue().orElse("").equals("2")){
                         @Messages("app.user.registration.user.type.tutor")
-                        }else if(f("roleType").getValue().orElse("").equals("3")){
-                        @Messages("app.user.registration.user.type.student")
                         }else{
                         @Messages("app.na")
                         }
@@ -213,64 +198,6 @@
                     </div>
                     }else{
                     <p>@filter.getSchools().get(f("schoolId").getValue().orElse(""))</p>
-                    }
-                </div>
-            </div>
-            <div class="form-group row linkDiv1">
-                <label class="col-md-3 col-form-label"
-                       for="roleType">@Messages("app.batch.title")</label>
-                <div class="col-md-9">
-                    @if(curdOpt == 1 || curdOpt == 2){
-                    <select class='form-control custom-select' id="batchId" name="batchId"
-                            autocomplete="off" required="required"
-                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
-                            data-toggle="tooltip" data-html="true"
-                            title='@Messages("app.validation.txt1")@Messages("app.batch.title")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
-                        <option value="">@Messages("app.select")</option>
-                        @for( (key, value) <- filter.getBatches()) {
-                        @if((key+"").equals(f("batchId").getValue().orElse(""))){
-                        <option value="@key" selected="selected">@value</option>
-                        }else {
-                        <option value="@key">@value</option>
-                        }
-                        }
-                    </select>
-                    <div class="invalid-feedback">
-                        @for(error <- f("batchId").errors) {
-                        @error.format(messages())
-                        }
-                    </div>
-                    }else{
-                    <p>@filter.getBatches().get(f("batchId").getValue().orElse(""))</p>
-                    }
-                </div>
-            </div>
-            <div class="form-group row linkDiv1">
-                <label class="col-md-3 col-form-label"
-                       for="roleType">@Messages("app.section.title")</label>
-                <div class="col-md-9">
-                    @if(curdOpt == 1 || curdOpt == 2){
-                    <select class='form-control custom-select' id="sectionId" name="sectionId"
-                            autocomplete="off" required="required"
-                            data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
-                            data-toggle="tooltip" data-html="true"
-                            title='@Messages("app.validation.txt1")@Messages("app.section.title")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")'>
-                        <option value="">@Messages("app.select")</option>
-                        @for( (key, value) <- filter.getSections()) {
-                        @if((key+"").equals(f("sectionId").getValue().orElse(""))){
-                        <option value="@key" selected="selected">@value</option>
-                        }else {
-                        <option value="@key">@value</option>
-                        }
-                        }
-                    </select>
-                    <div class="invalid-feedback">
-                        @for(error <- f("sectionId").errors) {
-                        @error.format(messages())
-                        }
-                    </div>
-                    }else{
-                    <p>@filter.getSections().get(f("sectionId").getValue().orElse(""))</p>
                     }
                 </div>
             </div>

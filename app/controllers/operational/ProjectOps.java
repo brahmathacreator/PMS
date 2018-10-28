@@ -18,6 +18,7 @@ import play.mvc.BodyParser;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.Interface.ProjectMeta;
+import services.Interface.UserMeta;
 import views.html.error.error;
 import views.html.operations.project;
 
@@ -34,6 +35,9 @@ public class ProjectOps extends SessionController implements GenericOps {
     @Inject
     private ProjectMeta meta;
 
+    @Inject
+    private UserMeta userMeta;
+
     @Override
     public Result index(Integer curdOpt, String activeMenu) {
         Logger.debug("Inside [ProjectOps][index]");
@@ -47,7 +51,7 @@ public class ProjectOps extends SessionController implements GenericOps {
             filter.setOrderByColumn("projectTitle");
             filter.setOrderByValue("asc");
             page = meta.getAllData(filter);
-            return ok(project.render(curdOpt, activeMenu, filter.getOrderByColumn(), filter.getOrderByValue(), filter.getSearchColumn(), filter.getSearchValue(), page, null));
+            return ok(project.render(curdOpt, activeMenu, filter.getOrderByColumn(), filter.getOrderByValue(), filter.getSearchColumn(), filter.getSearchValue(), page, null, null));
         } catch (Exception ex) {
             Logger.error("Error : " + ex);
             return badRequest(error.render(ctx().messages().at("app.details"), ex));
@@ -70,7 +74,7 @@ public class ProjectOps extends SessionController implements GenericOps {
             filter.setOrderByColumn(currentSortBy);
             filter.setOrderByValue(currentOrder);
             page = meta.getAllData(filter);
-            return ok(project.render(curdOpt, activeMenu, filter.getOrderByColumn(), filter.getOrderByValue(), filter.getSearchColumn(), filter.getSearchValue(), page, null));
+            return ok(project.render(curdOpt, activeMenu, filter.getOrderByColumn(), filter.getOrderByValue(), filter.getSearchColumn(), filter.getSearchValue(), page, null, null));
         } catch (Exception ex) {
             Logger.error("Error : " + ex);
             return badRequest(error.render(ctx().messages().at("app.details"), ex));
@@ -85,6 +89,7 @@ public class ProjectOps extends SessionController implements GenericOps {
         Logger.debug("Inside [ProjectOps][selectRecord]");
         Project object = null;
         Form<Project> form = null;
+        PageFilter filter = null;
         try {
             if (curdOpt == Constants.CURD_SAVE) {
                 object = new Project();
@@ -99,13 +104,16 @@ public class ProjectOps extends SessionController implements GenericOps {
                 return redirect(routes.ProjectOps.index(Constants.CURD_VIEW_ALL, activeMenu));
             }
             form = factory.form(Project.class).fill(object);
-            return ok(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+            filter = new PageFilter();
+            filter.setUsers(userMeta.getAllStudents());
+            return ok(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
         } catch (Exception ex) {
             Logger.error("Error : " + ex);
             return badRequest(error.render(ctx().messages().at("app.details"), ex));
         } finally {
             object = null;
             form = null;
+            filter = null;
         }
     }
 
@@ -121,17 +129,20 @@ public class ProjectOps extends SessionController implements GenericOps {
         Http.MultipartFormData.FilePart<File> logo = null;
         File source = null, dest = null;
         String path = null, imgName = null;
+        PageFilter filter = null;
         try {
             form = factory.form(Project.class).bindFromRequest();
+            filter = new PageFilter();
+            filter.setUsers(userMeta.getAllStudents());
             if (form.hasErrors() && curdOpt != Constants.CURD_DELETE) {
-                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
             }
             if (curdOpt == Constants.CURD_SAVE || curdOpt == Constants.CURD_UPDATE) {
                 body = request().body().asMultipartFormData();
                 logo = body.getFile("avatar");
                 if (body == null || logo == null) {
                     flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.2"));
-                    return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+                    return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
                 }
                 object = form.get();
                 if (logo.getFilename() == null || logo.getFilename().trim().isEmpty()) {
@@ -152,11 +163,11 @@ public class ProjectOps extends SessionController implements GenericOps {
                                 source.renameTo(dest);
                             } else {
                                 flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.3"));
-                                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+                                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
                             }
                         } else {
                             flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.3"));
-                            return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+                            return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
                         }
                     } catch (Exception ex) {
                         object.setLogo(Constants.DEFAULT_USER_LOGO);
@@ -185,15 +196,16 @@ public class ProjectOps extends SessionController implements GenericOps {
                 }
             } else {
                 flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.7"));
-                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+                return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
             }
             flash(Constants.ALERT_FAILURE, ctx().messages().at("app.error.txt.0"));
-            return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form));
+            return badRequest(project.render(curdOpt, activeMenu, null, null, null, null, null, form, filter));
         } catch (Exception ex) {
             Logger.error("Error : " + ex);
             return badRequest(error.render(ctx().messages().at("app.details"), ex));
         } finally {
             form = null;
+            filter = null;
         }
 
     }

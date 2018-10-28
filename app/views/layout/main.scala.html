@@ -111,6 +111,16 @@
                                 @Messages("app.menu.school")
                             </a>
                         </li>
+                        <li class="nav-title">@Messages("app.menu.administration")</li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.user.routes.UserOps.index(4, Messages("app.menu.user"))'>
+                                <i class="fa fa-user fa-lg"></i>
+                                @Messages("app.menu.user")
+                            </a>
+                        </li>
+                        }else if("2".equals(session.get("SESSION_ROLE_TYPE"))){
+                        <li class="nav-title">@Messages("app.menu.administration")</li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="return showLoader();"
                                href='@controllers.operational.routes.BatchOps.index(4, Messages("app.menu.batch"))'>
@@ -125,7 +135,6 @@
                                 @Messages("app.menu.section")
                             </a>
                         </li>
-                        <li class="nav-title">@Messages("app.menu.administration")</li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="return showLoader();"
                                href='@controllers.user.routes.UserOps.index(4, Messages("app.menu.user"))'>
@@ -133,8 +142,15 @@
                                 @Messages("app.menu.user")
                             </a>
                         </li>
-                        }else if("2".equals(session.get("SESSION_ROLE_TYPE")) ||
-                        "3".equals(session.get("SESSION_ROLE_TYPE"))){
+                        <li class="nav-title">@Messages("app.menu.operations")</li>
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="return showLoader();"
+                               href='@controllers.operational.routes.ProjectOps.index(4, Messages("app.menu.project"))'>
+                                <i class="fa fa-stack-overflow fa-lg"></i>
+                                @Messages("app.menu.project")
+                            </a>
+                        </li>
+                        }else if("3".equals(session.get("SESSION_ROLE_TYPE"))){
                         <li class="nav-title">@Messages("app.menu.operations")</li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="return showLoader();"

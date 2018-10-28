@@ -1,7 +1,7 @@
 #general texts
-app.name = PMS
-app.product.desc = Project Management System
-app.desc.detail = Project management system is the application of knowledge, skills, tools, and techniques to project activities to meet the project requirements.
+app.name = IAMS
+app.product.desc = Internal Assessment Management System
+app.desc.detail = Internal Assessment management system is the application for monitoring the student internal assessment progress.
 app.author = Ramakrishna
 app.keyword = Project, Management, system
 app.rights = 2018 All Rights Reserved.
@@ -86,6 +86,15 @@ app.admin.registration.user.type = User type
 app.user.registration.user.type.admin = Admin
 app.user.registration.user.type.tutor = Tutor
 app.user.registration.user.type.student = Student
+app.user.registration.student.id = Student Id
+app.user.registration.student.level = Level
+app.user.registration.student.level.low = Low
+app.user.registration.student.level.medium = Medium
+app.user.registration.student.level.high = High
+app.user.registration.project.Status = Project Status
+app.user.registration.project.Status.yet.to.start = Yet to start
+app.user.registration.project.Status.in.progress = In progress
+app.user.registration.project.Status.completed = Completed
 
 
 #Mail
@@ -132,6 +141,7 @@ app.project.name.note = Project Title Note
 app.project.creation.dt = Created On
 app.project.duration = Duration (in Days)
 app.project.description = Project Description
+app.project.student = Student
 
 #Comments
 app.comments.title = Comments / Tasks
@@ -178,6 +188,9 @@ app.error.txt.12 = Invalid school id.
 app.error.txt.13 = Invalid batch id.
 app.error.txt.14 = Invalid section id.
 app.error.txt.15 = Email id already registered.
+app.error.txt.16 = Invalid student id.
+app.error.txt.17 = Invalid student level.
+app.error.txt.18 = Invalid project status.
 
 
 #Validation
@@ -212,7 +225,7 @@ app.validation.txt3 = ]
 app.validation.txt.min = Min [
 page.validation.txt.max = Max [
 page.validation.txt.Mandatory.yes = Mandatory [Yes]
-page.validation.txt..Mandatory.no = Mandatory [No]
+page.validation.txt.Mandatory.no = Mandatory [No]
 
 
 #Menu Details

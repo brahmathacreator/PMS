@@ -6,9 +6,7 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Comments extends Model {
@@ -16,13 +14,11 @@ public class Comments extends Model {
     @Id
     @GeneratedValue
     private Long commentId;
-    @Constraints.Required
     private String subject;
-    @Constraints.Required
     private String commentByName;
     @Constraints.Required
     @Lob
-    @Column(name="description", length=2000)
+    @Column(name = "description", length = 2000)
     private String description;
     private String attachment;
     @Formats.DateTime(pattern = "MM/dd/yyyy")
@@ -34,6 +30,7 @@ public class Comments extends Model {
     @Formats.DateTime(pattern = "MM/dd/yyyy")
     private Date actualEndDate;
     private int markedFlag;
+
 
 
     @Transient

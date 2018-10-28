@@ -20,7 +20,7 @@ public class Project extends Model {
     private String logo;
     @Constraints.Required(message = "page.validation.txt.Mandatory.yes")
     @Lob
-    @Column(name="description", length=2000)
+    @Column(name = "description", length = 2000)
     private String description;
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date projectCreationDT;
@@ -29,9 +29,10 @@ public class Project extends Model {
     @Column(nullable = false)
     private Long schoolId;
     @Column(nullable = false)
-    private Long batchId;
+    private Long createdBy;
+    @Constraints.Required(message = "page.validation.txt.Mandatory.yes")
     @Column(nullable = false)
-    private Long sectionId;
+    private Long studentId;
     private String finalDescription;
     private String zippedComments;
 
@@ -115,22 +116,6 @@ public class Project extends Model {
         this.schoolId = schoolId;
     }
 
-    public Long getBatchId() {
-        return batchId;
-    }
-
-    public void setBatchId(Long batchId) {
-        this.batchId = batchId;
-    }
-
-    public Long getSectionId() {
-        return sectionId;
-    }
-
-    public void setSectionId(Long sectionId) {
-        this.sectionId = sectionId;
-    }
-
     public String getFinalDescription() {
         return finalDescription;
     }
@@ -145,5 +130,21 @@ public class Project extends Model {
 
     public void setZippedComments(String zippedComments) {
         this.zippedComments = zippedComments;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

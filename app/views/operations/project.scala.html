@@ -1,4 +1,4 @@
-@(curdOpt: Integer, activeMenu: String,currentSortBy: String, currentOrder: String, searchBy: String, searchValue: String, page: io.ebean.PagedList[Project], f: Form[Project])
+@(curdOpt: Integer, activeMenu: String,currentSortBy: String, currentOrder: String, searchBy: String, searchValue: String, page: io.ebean.PagedList[Project], f: Form[Project],filter: dto.PageFilter)
 
 @link(newPage: Int, newSortBy:String) = @{
 var sortBy = currentSortBy
@@ -103,8 +103,8 @@ controllers.operational.routes.ProjectOps.search(curdOpt, activeMenu, newPage, s
             @for(l <- page.getList.asScala) {
             <tr>
                 <td>@l.getProjectTitle()</td>
-                <td>@if(l.getDescription().length() > 20){@l.getDescription().take(20)...}</td>
-                <td>@if(l.getProjectTitleDesc().length() > 20){@l.getProjectTitleDesc().take(20)...}</td>
+                <td>@if(l.getDescription().length() > 20){@l.getDescription().take(20)...}else{@l.getDescription()}</td>
+                <td>@if(l.getProjectTitleDesc().length() > 20){@l.getProjectTitleDesc().take(20)...}else{@l.getProjectTitleDesc()}</td>
                 <td>@l.getProjectCreationDT()</td>
                 <td>@l.getDuration()</td>
                 <td>
@@ -168,7 +168,7 @@ controllers.operational.routes.ProjectOps.search(curdOpt, activeMenu, newPage, s
     </div>
 </div>
 }else if((curdOpt == 1 || curdOpt == 2 || curdOpt == 5) && "2".equals(session.get("SESSION_ROLE_TYPE"))){
-@_projectregistration(curdOpt, activeMenu, controllers.operational.routes.ProjectOps.curdOperations(curdOpt, activeMenu), f)
+@_projectregistration(curdOpt, activeMenu, controllers.operational.routes.ProjectOps.curdOperations(curdOpt, activeMenu), f, filter: dto.PageFilter)
 }else{
 @_invalidcurd(curdOpt, activeMenu)
 }

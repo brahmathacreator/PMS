@@ -139,8 +139,7 @@
                     <input class='form-control  @if(f.getError("batchInchargePhone").isPresent()){is-invalid}'
                            id="batchInchargePhone" type="text"
                            name="batchInchargePhone" value='@f("batchInchargePhone").getValue().orElse("")'
-                           autocomplete="off" required="required"
-                           data-parsley-required-message='@Messages("page.validation.txt.Mandatory.yes")'
+                           autocomplete="off"
                            data-parsley-minlength='@Messages("app.phone.min")'
                            data-parsley-minlength-message='@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")'
                            data-parsley-maxlength='@Messages("app.phone.max")'
@@ -148,7 +147,7 @@
                            data-parsley-pattern='@Messages("app.phone.pattern")'
                            data-parsley-pattern-message='@Messages("app.phone.desc")'
                            data-toggle="tooltip" data-html="true"
-                           title='@Messages("app.validation.txt1")@Messages("app.batch.incharge.person.phone")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.yes")<br>@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")<br>@Messages("app.phone.desc")'>
+                           title='@Messages("app.validation.txt1")@Messages("app.batch.incharge.person.phone")@Messages("app.validation.txt2")<br>@Messages("page.validation.txt.Mandatory.no")<br>@Messages("app.validation.txt.min")@Messages("app.phone.min")@Messages("app.validation.txt3")<br>@Messages("page.validation.txt.max")@Messages("app.phone.max")@Messages("app.validation.txt3")<br>@Messages("app.phone.desc")'>
                     <div class="invalid-feedback">
                         @for(error <- f("batchInchargePhone").errors) {
                         @error.format(messages())

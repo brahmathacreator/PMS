@@ -10,6 +10,8 @@ create table batch (
   batch_incharge_name           varchar(255),
   batch_incharge_email          varchar(255),
   batch_incharge_phone          varchar(255),
+  school_id                     bigint,
+  created_by                    bigint,
   logo                          varchar(255),
   constraint pk_batch primary key (batch_id)
 );
@@ -58,8 +60,8 @@ create table project (
   project_creation_dt           datetime(6),
   duration                      integer,
   school_id                     bigint not null,
-  batch_id                      bigint not null,
-  section_id                    bigint not null,
+  created_by                    bigint not null,
+  student_id                    bigint not null,
   final_description             varchar(255),
   zipped_comments               varchar(255),
   constraint pk_project primary key (project_id)
@@ -83,6 +85,8 @@ create table section (
   section_incharge_name         varchar(255),
   section_incharge_email        varchar(255),
   section_incharge_phone        varchar(255),
+  school_id                     bigint,
+  created_by                    bigint,
   constraint pk_section primary key (section_id)
 );
 
@@ -104,6 +108,9 @@ create table user (
   user_key                      bigint auto_increment not null,
   user_id                       varchar(255),
   username                      varchar(255),
+  student_id                    varchar(255),
+  project_status                integer,
+  student_level                 integer,
   email                         varchar(255),
   phone                         varchar(255),
   logo                          varchar(255),
@@ -113,6 +120,7 @@ create table user (
   school_id                     integer default 0,
   batch_id                      integer default 0,
   section_id                    integer default 0,
+  created_by                    integer default 0,
   constraint uq_user_user_id unique (user_id),
   constraint uq_user_email unique (email),
   constraint pk_user primary key (user_key)

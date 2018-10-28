@@ -38,6 +38,8 @@ public class SectionImpl implements SectionMeta {
                 exList.add(Expr.ilike(filter.getSearchColumn(), "%" + filter.getSearchValue() + "%"));
             if (filter.getOrderByColumn() != null && !filter.getOrderByColumn().isEmpty() && filter.getOrderByValue() != null && !filter.getOrderByValue().isEmpty())
                 exList.orderBy(filter.getOrderByColumn() + " " + filter.getOrderByValue());
+            exList.add(Expr.ilike("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+            exList.add(Expr.ilike("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
             exList.setFirstRow(filter.getCurrentPage() * Validation.DEFAULT_PAGE_SIZE);
             exList.setMaxRows(Validation.DEFAULT_PAGE_SIZE);
             return exList.findPagedList();
@@ -51,7 +53,9 @@ public class SectionImpl implements SectionMeta {
         Logger.debug("Inside [SectionImpl][getDataByKey]");
         Optional<Section> optional;
         try {
-            optional = Optional.ofNullable((ebeanServer.find(Section.class).where().eq("sectionId", id).findOne()));
+            optional = Optional.ofNullable((ebeanServer.find(Section.class).where().eq("sectionId", id)
+                    .eq("schoolId", Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID))
+                    .eq("createdBy", Http.Context.current().session().get(Constants.SESSION_USER_KEY)).findOne()));
             return optional;
         } finally {
             optional = null;
@@ -69,6 +73,8 @@ public class SectionImpl implements SectionMeta {
         boolean status = false;
         try {
             object.setSectionInchargeEmail(object.getSectionInchargeEmail().toLowerCase());
+            object.setSchoolId(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_SCHOOL_ID)));
+            object.setCreatedBy(Long.parseLong(Http.Context.current().session().get(Constants.SESSION_USER_KEY)));
             if (curdOpt == Constants.CURD_SAVE) {
                 object.save();
             } else if (curdOpt == Constants.CURD_UPDATE) {
