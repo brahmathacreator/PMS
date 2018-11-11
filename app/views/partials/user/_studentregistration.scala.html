@@ -323,15 +323,6 @@
                             @Messages("app.user.registration.student.level.medium")
                         </option>
                         }
-                        @if(f("studentLevel").getValue().orElse("").equals("3")){
-                        <option value="3" selected='selected'>
-                            @Messages("app.user.registration.student.level.high")
-                        </option>
-                        }else{
-                        <option value="3">
-                            @Messages("app.user.registration.student.level.high")
-                        </option>
-                        }
                     </select>
                     <div class="invalid-feedback">
                         @for(error <- f("studentLevel").errors) {

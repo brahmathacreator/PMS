@@ -50,7 +50,7 @@ app.back = Back
 #Main Layout
 app.layout.main.user.type = User type
 app.layout.main.user.type.admin = Admin
-app.layout.main.user.type.tutor = Tutor
+app.layout.main.user.type.tutor = Teacher
 app.layout.main.user.type.student = Student
 
 #Home
@@ -84,15 +84,15 @@ app.admin.registration.phone = Phone
 app.admin.registration.avatar = Avatar
 app.admin.registration.user.type = User type
 app.user.registration.user.type.admin = Admin
-app.user.registration.user.type.tutor = Tutor
+app.user.registration.user.type.tutor = Teacher
 app.user.registration.user.type.student = Student
 app.user.registration.student.id = Student Id
 app.user.registration.student.level = Level
-app.user.registration.student.level.low = Low
-app.user.registration.student.level.medium = Medium
+app.user.registration.student.level.low = SL
+app.user.registration.student.level.medium = HL
 app.user.registration.student.level.high = High
 app.user.registration.project.Status = Project Status
-app.user.registration.project.Status.yet.to.start = Yet to start
+app.user.registration.project.Status.yet.to.start = Initiation
 app.user.registration.project.Status.in.progress = In progress
 app.user.registration.project.Status.completed = Completed
 
@@ -243,6 +243,6 @@ app.menu.operations = Operations
 app.menu.school = School
 app.menu.batch = Batch
 app.menu.section = Section
-app.menu.tutor = Tutor
+app.menu.tutor = Teacher
 app.menu.student = Student
 app.menu.project = Project

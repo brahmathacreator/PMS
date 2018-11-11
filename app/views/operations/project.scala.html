@@ -95,7 +95,7 @@ controllers.operational.routes.ProjectOps.search(curdOpt, activeMenu, newPage, s
                 @header("description",Messages("app.desc"))
                 @header("projectTitleDesc",Messages("app.project.name.note"))
                 @header("projectCreationDT",Messages("app.project.creation.dt"))
-                @header("duration",Messages("app.project.duration"))
+                @header("duration",Messages("app.project.student"))
                 <th class="colorblue">@Messages("app.options")</th>
             </tr>
             </thead>
@@ -105,7 +105,7 @@ controllers.operational.routes.ProjectOps.search(curdOpt, activeMenu, newPage, s
                 <td>@l.getProjectTitle()</td>
                 <td>@if(l.getDescription().length() > 20){@l.getDescription().take(20)...}else{@l.getDescription()}</td>
                 <td>@if(l.getProjectTitleDesc().length() > 20){@l.getProjectTitleDesc().take(20)...}else{@l.getProjectTitleDesc()}</td>
-                <td>@l.getProjectCreationDT()</td>
+                <td>@l.getStudentId()</td>
                 <td>@l.getDuration()</td>
                 <td>
                     <a onclick="return showLoader();"
